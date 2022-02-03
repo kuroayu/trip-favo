@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(topToolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+        //ビューのIDとそれに含まれるアクティビティを指定してNavControllerを検索
         val navController = findNavController(R.id.nav_host_fragment)
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         setupWithNavController(bottomNavigation, navController)
