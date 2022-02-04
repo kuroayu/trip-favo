@@ -13,4 +13,11 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="RatingBar" parent="Widget.AppCompat.RatingBar.Small">
+        <!-- The color applied to framework controls in their activated (ex. checked) state. -->
+        <item name="colorControlNormal">#d6d7d8</item>
+        <item name="colorControlActivated">#f3b713</item>
+        <item name="android:disabledAlpha">1.0</item>
+    </style>
 </resources>
