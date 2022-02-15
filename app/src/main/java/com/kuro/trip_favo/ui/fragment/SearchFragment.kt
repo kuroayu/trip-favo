@@ -1,8 +1,6 @@
 package com.kuro.trip_favo.ui.fragment
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,7 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.activity_search_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
