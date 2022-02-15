@@ -7,7 +7,7 @@
 
     <custom_fragment
         android:id="@+id/favo"
-        android:name="com.kuro.trip_favo.ui.fragment.FavoFragment"
+        android:name="com.kuro.trip_favo.ui.fragment.FavoriteFragment"
         android:label="@string/favo_fragment"/>
 
     <custom_fragment

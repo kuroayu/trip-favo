@@ -14,12 +14,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //ビューのIDとそれに含まれるアクティビティを指定してNavControllerを検索?
-        //navController :　HostFragmentとしてfragmentの入れ物の役割？
         val navController = findNavController(R.id.nav_host_fragment)
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val toolbar = findViewById<Toolbar>(R.id.top_toolbar)
-        //HostFragmentとBottomNavigationを関連づけた?
+
         //setupWithNavController: findNavControllerのラッパー
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.favo, R.id.search))
         setupWithNavController(bottomNavigation, navController)
