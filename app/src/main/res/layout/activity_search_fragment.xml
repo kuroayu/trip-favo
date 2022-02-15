@@ -6,4 +6,120 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.SearchFragment">
 
+    <SearchView
+        android:id="@+id/searchbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:queryHint="キーワード入力"
+        android:iconifiedByDefault="false"/>
+
+    <TextView
+        android:id="@+id/area_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/searchbar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/area"
+        android:textColor="@color/black"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/prefecture_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/area_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/prefecture"
+        android:textColor="@color/black"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/city_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/prefecture_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/city"
+        android:textColor="@color/black"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/city_text"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/review_text"
+        android:textColor="@color/black"
+        android:textSize="20sp"/>
+
+    <RatingBar
+        android:id="@+id/ratingbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/city_text"
+        app:layout_constraintStart_toEndOf="@+id/review"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="20dp"
+        android:rating="3"
+        android:theme="@style/RatingBar_"
+        style="?android:attr/ratingBarStyleIndicator"
+        />
+
+    <TextView
+        android:id="@+id/onsen_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/review"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/onsen"
+        android:textSize="20dp"
+        android:textColor="@color/black"/>
+
+    <Switch
+        android:id="@+id/search_onsen_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/onsen_text"
+        app:layout_constraintTop_toBottomOf="@+id/review"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
+        android:switchMinWidth="60dp"
+        android:checked="true"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onsen_text"
+        android:layout_marginTop="50dp"
+        android:background="@color/blue"
+        android:text="@string/search"
+        android:textColor="@color/white"
+        />
+
+
+
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

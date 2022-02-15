@@ -2,4 +2,16 @@
     <string name="app_name">trip_favo</string>
     <string name="favo_fragment">おきにいり</string>
     <string name="search_fragment">ホテルをさがす</string>
+    <string name="onsen">温泉:</string>
+    <string name="order">並び替え:</string>
+    <string name="review">レビュー順</string>
+    <string name="cheap">安い順</string>
+    <string name="expensive">高い順</string>
+    <string name="recently">新しい順</string>
+    <string name="old">古い順</string>
+    <string name="search">検索</string>
+    <string name="area">地域:</string>
+    <string name="prefecture">県:</string>
+    <string name="city">市:</string>
+    <string name="review_text">レビュー:</string>
 </resources>

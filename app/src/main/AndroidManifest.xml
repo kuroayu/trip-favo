@@ -10,8 +10,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Trip_favo">
-
-        <activity android:name=".ui.activity.MainActivity"
+        <activity
+            android:name=".ui.fragment.SearchResultFragment"
+            android:exported="false" />
+        <activity
+            android:name=".ui.fragment.FavoriteSearchFragment"
+            android:exported="false" />
+        <activity
+            android:name=".ui.fragment.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -20,4 +20,10 @@
         <item name="colorControlActivated">#f3b713</item>
         <item name="android:disabledAlpha">1.0</item>
     </style>
+    <style name="RatingBar_" parent="Widget.AppCompat.RatingBar.Indicator">
+        <!-- The color applied to framework controls in their activated (ex. checked) state. -->
+        <item name="colorControlNormal">#d6d7d8</item>
+        <item name="colorControlActivated">#f3b713</item>
+        <item name="android:disabledAlpha">1.0</item>
+    </style>
 </resources>
