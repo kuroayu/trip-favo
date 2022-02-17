@@ -1,9 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Trip_favo" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Trip_favo" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/sky_blue</item>
+        <item name="colorPrimaryVariant">@color/blue</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -12,5 +12,12 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="RatingBar" parent="Widget.AppCompat.RatingBar.Small">
+        <!-- The color applied to framework controls in their activated (ex. checked) state. -->
+        <item name="colorControlNormal">#d6d7d8</item>
+        <item name="colorControlActivated">#f3b713</item>
+        <item name="android:disabledAlpha">1.0</item>
     </style>
 </resources>

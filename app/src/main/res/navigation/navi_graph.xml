@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navi_graph"
+    app:startDestination="@id/favo">
+
+    <custom_fragment
+        android:id="@+id/favo"
+        android:name="com.kuro.trip_favo.ui.fragment.FavoriteFragment"
+        android:label="@string/favo_fragment"/>
+
+    <custom_fragment
+        android:id="@+id/search"
+        android:name="com.kuro.trip_favo.ui.fragment.SearchFragment"
+        android:label="@string/search_fragment"/>
+
+</navigation>
