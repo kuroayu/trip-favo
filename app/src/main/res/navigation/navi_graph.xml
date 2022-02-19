@@ -8,11 +8,20 @@
     <custom_fragment
         android:id="@+id/favo"
         android:name="com.kuro.trip_favo.ui.fragment.FavoriteFragment"
-        android:label="@string/favo_fragment"/>
+        android:label="@string/favo_fragment">
+        <action
+            android:id="@+id/action_favo_to_favoriteSearchFragment2"
+            app:destination="@id/favoriteSearchFragment2" />
+    </custom_fragment>
 
     <custom_fragment
         android:id="@+id/search"
         android:name="com.kuro.trip_favo.ui.fragment.SearchFragment"
         android:label="@string/search_fragment"/>
+    <dialog
+        android:id="@+id/favoriteSearchFragment2"
+        android:name="com.kuro.trip_favo.ui.fragment.FavoriteSearchFragment"
+        android:label="FavoriteSearchFragment" />
+
 
 </navigation>
