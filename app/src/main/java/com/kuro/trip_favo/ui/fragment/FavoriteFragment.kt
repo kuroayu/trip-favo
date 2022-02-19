@@ -1,7 +1,6 @@
 package com.kuro.trip_favo.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,19 +33,18 @@ class FavoriteFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.fovo_recyclerview)
         val fab = view.findViewById<FloatingActionButton>(R.id.fab_favo)
         fab.setOnClickListener {
-           findNavController().navigate(R.id.action_favo_to_favoriteSearchFragment2)
+            findNavController().navigate(R.id.action_favo_to_favoriteSearchFragment2)
         }
-//        val bottomSheet = view.findViewById<ConstraintLayout>(R.id.bottom_sheet_layout)
-//
-//        fab.setOnClickListener {
-//            bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
-//        }
 
         val adapter = FavoriteAdapter(dummyLists())
         recyclerView.adapter = adapter
         recyclerView.layoutManager = linearLayoutManager
-        recyclerView.addItemDecoration(DividerItemDecoration(view.context, LinearLayoutManager.VERTICAL))
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                view.context,
+                LinearLayoutManager.VERTICAL
+            )
+        )
         return view
     }
 
@@ -55,17 +53,14 @@ class FavoriteFragment : Fragment() {
 
     }
 
-
-
     private fun dummyLists(): MutableList<DummyData> {
         var dummyLists: MutableList<DummyData> = ArrayList()
-        var dummy = DummyData("アパホテル",24000,"石川県金沢市2")
+        var dummy = DummyData("アパホテル", 24000, "石川県金沢市2")
         var i = 0
-        while (i < 20){
+        while (i < 20) {
             i++
             dummyLists.add(dummy)
         }
-
-     return dummyLists
+        return dummyLists
     }
 }

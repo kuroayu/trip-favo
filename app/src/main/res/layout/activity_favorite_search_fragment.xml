@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<!--<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".ui.fragment.FavoriteSearchFragment">-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,10 +18,9 @@
             android:id="@+id/favo_search_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/blue"
             android:padding="16dp"
-            android:text="検索"
-            android:textColor="@color/white"
+            android:text="@string/search"
+            android:textColor="@color/blue"
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -83,39 +74,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fovo_onsen" />
 
-        <TextView
-            android:id="@+id/current_order"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="30dp"
-            android:text="@string/review"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/fovo_order"
-            app:layout_constraintTop_toBottomOf="@+id/fovo_onsen" />
-
         <Spinner
             android:id="@+id/favo_order_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:layout_marginTop="30dp"
-            app:layout_constraintStart_toEndOf="@+id/current_order"
+            android:layout_marginTop="17dp"
+            app:layout_constraintStart_toEndOf="@+id/fovo_order"
             app:layout_constraintTop_toBottomOf="@+id/fovo_onsen" />
 
-        <Button
-            android:id="@+id/favo_search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:background="@color/blue"
-            android:text="@string/search"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fovo_order" />
+    <Button
+        android:id="@+id/favo_search_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@color/blue"
+        android:text="@string/search"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fovo_order"
+        android:layout_marginBottom="16dp" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+</androidx.constraintlayout.widget.ConstraintLayout>
