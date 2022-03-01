@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="order">
+        <item>レビュー順</item>
+        <item>安い順</item>
+        <item>高い順</item>
+        <item>新しい順</item>
+        <item>古い順</item>
+    </string-array>
+</resources>
