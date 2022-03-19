@@ -17,31 +17,31 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:queryHint="キーワード入力"
-        android:iconifiedByDefault="false"/>
+        android:iconifiedByDefault="false"
+        android:focusable="false" />
 
-    <TextView
-        android:id="@+id/area_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/searchbar"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="50dp"
-        android:text="@string/area"
-        android:textColor="@color/black"
-        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/prefecture_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/area_text"
+        app:layout_constraintTop_toBottomOf="@+id/searchbar"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:text="@string/prefecture"
         android:textColor="@color/black"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
+
+    <!--    都道府県出すスピナー-->
+    <Spinner
+        android:id="@+id/Middle_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/prefecture_text"
+        app:layout_constraintTop_toBottomOf="@+id/searchbar"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:id="@+id/city_text"
@@ -53,7 +53,17 @@
         android:layout_marginTop="30dp"
         android:text="@string/city"
         android:textColor="@color/black"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
+
+    <Spinner
+        android:id="@+id/small_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/city_text"
+        app:layout_constraintTop_toBottomOf="@+id/prefecture_text"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp" />
+
 
     <TextView
         android:id="@+id/review"
@@ -65,7 +75,7 @@
         android:layout_marginTop="30dp"
         android:text="@string/review_text"
         android:textColor="@color/black"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
     <RatingBar
         android:id="@+id/ratingbar"
@@ -77,8 +87,7 @@
         android:layout_marginStart="20dp"
         android:rating="3"
         android:theme="@style/RatingBar_"
-        style="?android:attr/ratingBarStyleIndicator"
-        />
+        style="?android:attr/ratingBarStyleIndicator" />
 
     <TextView
         android:id="@+id/onsen_text"
@@ -90,7 +99,7 @@
         android:layout_marginTop="30dp"
         android:text="@string/onsen"
         android:textSize="20dp"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black" />
 
     <Switch
         android:id="@+id/search_onsen_switch"
@@ -113,13 +122,7 @@
         android:layout_marginTop="50dp"
         android:background="@color/blue"
         android:text="@string/search"
-        android:textColor="@color/white"
-        />
-
-
-
-
-
+        android:textColor="@color/white" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
