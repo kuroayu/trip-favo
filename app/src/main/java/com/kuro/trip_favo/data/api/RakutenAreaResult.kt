@@ -1,36 +1,53 @@
 package com.kuro.trip_favo.data.api
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RakutenAreaResult(
-    val areaClasses: AreaClasses
+    val areaClasses: Area
 )
 
-data class AreaClasses(
-    val largeClasses: List<LargeClas>
+@Serializable
+data class Area(
+    @SerialName("largeClasses")
+    val largeAreas: List<LargeArea>
 )
 
-//国
-data class LargeClas(
-    val largeClassCode: String,
-    val largeClassName: String,
-    val middleClasses: List<MiddleClas>
+@Serializable
+data class LargeArea(
+    val largeClass: List<LargeClass>
 )
 
-//都道府県
-data class MiddleClas(
-    val middleClassCode: String,
-    val middleClassName: String,
-    val smallClasses: List<SmallClas>
+@Serializable
+data class LargeClass(
+    val largeClassCode: String? = null,
+    val largeClassName: String? = null,
+    @SerialName("middleClasses")
+    val middleAreas: List<MiddleArea>? = null,
 )
 
-//市
-data class SmallClas(
-    val detailClasses: List<DetailClass>,
-    val smallClassCode: String,
-    val smallClassName: String
+@Serializable
+data class MiddleArea(
+    val middleClass: List<MiddleClass>
 )
 
-//市の詳細　地区
-data class DetailClass(
-    val detailClassCode: String,
-    val detailClassName: String
+@Serializable
+data class MiddleClass(
+    val middleClassCode: String? = null,
+    val middleClassName: String? = null,
+    @SerialName("smallClasses")
+    val smallAreas: List<SmallArea>? = null
 )
+
+@Serializable
+data class SmallArea(
+    val smallClass: List<SmallClass>
+)
+
+@Serializable
+data class SmallClass(
+    val smallClassCode: String? = null,
+    val smallClassName: String? = null
+)
+
