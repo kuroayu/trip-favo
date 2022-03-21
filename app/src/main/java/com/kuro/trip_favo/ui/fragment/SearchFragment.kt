@@ -1,12 +1,14 @@
 package com.kuro.trip_favo.ui.fragment
 
+import RakutenHotelResult
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.RatingBar
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -32,8 +34,6 @@ class SearchFragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         val view = inflater.inflate(R.layout.fragment_search, container, false)
-
-
         getArea(view)
 
         return view
@@ -58,11 +58,10 @@ class SearchFragment : Fragment() {
         return retrofit.create(RakutenService::class.java)
     }
 
+    //地域コードの取得
     fun getArea(view: View) {
         createService().getRakutenArea().enqueue(object : retrofit2.Callback<RakutenAreaResult> {
             override fun onFailure(call: Call<RakutenAreaResult>, t: Throwable) {
-                Log.d("getarea", t.toString())
-
             }
 
             override fun onResponse(
@@ -70,22 +69,12 @@ class SearchFragment : Fragment() {
                 response: Response<RakutenAreaResult>
             ) {
                 if (response.isSuccessful) {
-                    Log.d("response", response.toString())
-
                     response.body()?.let {
-                        Log.d("body", it.toString())
-
-                        //リストの0番目でCodeが"japan"の値を取得
                         it.areaClasses.largeAreas.find { it.largeClass[0].largeClassCode == "japan" }
                             ?.let {
-                                Log.d("large", it.toString())
-                                //drop：largeClassからlargeClassName(国名)、middleAreas(都道府県情報)だけを取得した
-                                //faltMap : 都道府県情報の都道府県名だけmap化したものを取得
                                 val middleAreaLists = it.largeClass.drop(1).flatMap {
                                     it.middleAreas!!.map { it.middleClass[0].middleClassName }
                                 }
-                                Log.d("middleAreaLists", it.toString())
-
                                 val middleAreaSpinner =
                                     view.findViewById<Spinner>(R.id.Middle_spinner)
                                 val middleAreaAdapter = ArrayAdapter(
@@ -129,18 +118,48 @@ class SearchFragment : Fragment() {
                                         override fun onNothingSelected(parent: AdapterView<*>?) {
                                         }
                                     }
-
-
-//
                             }
                     }
-                } else {
-                    Log.d("else", "else")
                 }
             }
-
         })
+    }
 
+    //ホテル情報のレビュー取得
+    fun getHotel(view: View) {
+        createService().getRakutenHotel().enqueue(object : retrofit2.Callback<RakutenHotelResult> {
+            override fun onFailure(call: Call<RakutenHotelResult>, t: Throwable) {
+            }
+
+            override fun onResponse(
+                call: Call<RakutenHotelResult>,
+                response: Response<RakutenHotelResult>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+
+                        val ratingBar = view.findViewById<RatingBar>(R.id.ratingbar)
+                        val selectRating = ratingBar.rating.toDouble()
+
+                        val ReviewHotels = when (selectRating) {
+                            0.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 0.0 } }
+                            1.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 1.0 } }
+                            2.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 2.0 } }
+                            3.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 3.0 } }
+                            4.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 4.0 } }
+                            5.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 5.0 } }
+                            else -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 5.0 } }
+                        }
+
+                    }
+                }
+            }
+        }
+        )
+    }
+
+    fun sendSearchResultFragment() {
+        val intent = Intent(requireContext(), SearchResultFragment::class.java)
 
     }
 

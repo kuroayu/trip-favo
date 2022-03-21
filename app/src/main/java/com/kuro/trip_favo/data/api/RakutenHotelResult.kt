@@ -1,13 +1,15 @@
-package com.kuro.trip_favo.data.api
-
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class RakutenHotelResult(
-    val hotels: List<HotelBasicInfo>
+    val hotels: List<Hotel>
 )
 
-@Serializable
+data class Hotel(
+    val hotel: List<HotelX>
+)
+
+data class HotelX(
+    val hotelBasicInfo: HotelBasicInfo
+)
+
 data class HotelBasicInfo(
     val access: String,
     val address1: String,
@@ -25,14 +27,15 @@ data class HotelBasicInfo(
     val hotelThumbnailUrl: String,
     val latitude: Double,
     val longitude: Double,
-    val nearestStation: String,
+    val nearestStation: Any,
     val parkingInformation: String,
     val planListUrl: String,
     val postalCode: String,
     val reviewAverage: Double,
     val reviewCount: Int,
     val reviewUrl: String,
-    val roomImageUrl: String,
-    val roomThumbnailUrl: String,
-    val telephoneNo: String
+    val roomImageUrl: Any,
+    val roomThumbnailUrl: Any,
+    val telephoneNo: String,
+    val userReview: String
 )
