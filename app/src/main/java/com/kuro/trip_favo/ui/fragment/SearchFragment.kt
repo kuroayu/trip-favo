@@ -1,15 +1,11 @@
 package com.kuro.trip_favo.ui.fragment
 
 import RakutenHotelResult
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.RatingBar
-import android.widget.Spinner
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.kuro.trip_favo.R
@@ -25,7 +21,6 @@ import retrofit2.Retrofit
 
 class SearchFragment : Fragment() {
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,7 +29,9 @@ class SearchFragment : Fragment() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         val view = inflater.inflate(R.layout.fragment_search, container, false)
+
         getArea(view)
+        getHotel(view)
 
         return view
     }
@@ -137,30 +134,57 @@ class SearchFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let {
+                        val hotelInformation =
+                            it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo } }
 
                         val ratingBar = view.findViewById<RatingBar>(R.id.ratingbar)
-                        val selectRating = ratingBar.rating.toDouble()
+                        val searchBtn = view.findViewById<Button>(R.id.search_button)
+                        searchBtn.setOnClickListener {
+                            val ratingNow = ratingBar.rating.toDouble()
+                            //選択された評価と同じホテル情報取得できてるか怪しい //リサイクラービューのonBindでやるべき?
+                            hotelInformation.filter { it.reviewAverage.equals(ratingNow) }
 
-                        val ReviewHotels = when (selectRating) {
-                            0.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 0.0 } }
-                            1.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 1.0 } }
-                            2.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 2.0 } }
-                            3.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 3.0 } }
-                            4.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 4.0 } }
-                            5.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 5.0 } }
-                            else -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 5.0 } }
                         }
-
                     }
                 }
             }
         }
         )
     }
-
-    fun sendSearchResultFragment() {
-        val intent = Intent(requireContext(), SearchResultFragment::class.java)
-
-    }
-
 }
+
+
+//                        when (ratingSelected()) {
+//                            0.0 -> reviewAverage == "0.0"
+//                            1.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 1.0 } }
+//                            2.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 2.0 } }
+//                            3.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 3.0 } }
+//                            4.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 4.0 } }
+//                            5.0 -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 5.0 } }
+//                            else -> it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo.reviewAverage == 5.0 } }
+//                        }
+
+//                        val zeroReviewHotelLists = hotelInfo.filter { it.reviewAverage < 0.0 }
+//                        val oneReviewHotelLists = hotelInfo.filter { it.reviewAverage < 1.0 }
+//                        val twoReviewHotelLists = hotelInfo.filter { it.reviewAverage < 2.0 }
+//                        val threeReviewHotelLists = hotelInfo.filter { it.reviewAverage < 3.0 }
+//                        val fourReviewHotelLists = hotelInfo.filter { it.reviewAverage < 4.0 }
+//                        val fiveReviewHotelLists = hotelInfo.filter { it.reviewAverage < 5.0 }
+//                        val intent = Intent(requireContext(), SearchResultFragment::class.java)
+
+//                            if (ratingNow == 0.5) {
+//                                intent.putExtra("fiveReviewHotels", fiveReviewHotelLists.toString())
+//                            } else if (ratingNow == 0.4) {
+//                                intent.putExtra("fourReviewHotels", fourReviewHotelLists.toString())
+//                            } else if (ratingNow == 0.3) {
+//                                intent.putExtra(
+//                                    "threeReviewHotels", threeReviewHotelLists.toString()
+//                                )
+//                            } else if (ratingNow == 0.2) {
+//                                intent.putExtra("twoReviewHotels", twoReviewHotelLists.toString())
+//                            } else if (ratingNow == 0.1) {
+//                                intent.putExtra("oneReviewHotels", oneReviewHotelLists.toString())
+//                            } else if (ratingNow == 0.0) {
+//                                intent.putExtra("zeroReviewHotels", zeroReviewHotelLists.toString())
+//                            }
+
