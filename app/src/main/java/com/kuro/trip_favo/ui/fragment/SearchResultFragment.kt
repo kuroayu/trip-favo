@@ -1,6 +1,5 @@
 package com.kuro.trip_favo.ui.fragment
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kuro.trip_favo.R
-import com.kuro.trip_favo.ui.DummyData
-import com.kuro.trip_favo.ui.FavoriteListAdapter
 import com.kuro.trip_favo.ui.SearchAdapter
 import com.kuro.trip_favo.ui.SearchDummyData
+
 
 class SearchResultFragment : Fragment() {
 
@@ -46,3 +44,4 @@ class SearchResultFragment : Fragment() {
         }
     }
 }
+
