@@ -33,6 +33,7 @@ class SearchFragment : Fragment() {
         getArea(view)
         getHotel(view)
 
+
         return view
     }
 
@@ -77,7 +78,7 @@ class SearchFragment : Fragment() {
                                 val middleAreaAdapter = ArrayAdapter(
                                     requireContext(),
                                     android.R.layout.simple_spinner_dropdown_item,
-                                    middleAreaLists
+                                    middleAreaLists,
                                 )
                                 middleAreaSpinner.adapter = middleAreaAdapter
                                 middleAreaSpinner.onItemSelectedListener =
@@ -92,6 +93,9 @@ class SearchFragment : Fragment() {
                                                 parent.getItemAtPosition(position)
                                             val selectedMiddleClassName =
                                                 selectedMiddlePosition.toString()
+
+                                            val selectedMiddleClassCode = it.largeClass.drop(1)
+                                                .flatMap { it.middleAreas!!.map { it.middleClass[0].middleClassCode == selectedMiddleClassName } }
 
                                             val smallAreaLists = it.largeClass.drop(1).flatMap {
                                                 it.middleAreas?.find { it.middleClass[0].middleClassName == selectedMiddleClassName }
@@ -110,6 +114,28 @@ class SearchFragment : Fragment() {
                                             )
                                             smallAreaAdapter.notifyDataSetChanged()
                                             smallAreaSpinner?.adapter = smallAreaAdapter
+
+                                            smallAreaSpinner.onItemSelectedListener =
+                                                object : AdapterView.OnItemSelectedListener {
+                                                    override fun onItemSelected(
+                                                        parent: AdapterView<*>,
+                                                        view: View?,
+                                                        position: Int,
+                                                        id: Long
+                                                    ) {
+                                                        val selectedSmallPosition =
+                                                            parent.getItemAtPosition(position)
+                                                        val selectedSmallClassName =
+                                                            selectedSmallPosition.toString()
+                                                        val selectedSmallClassCode =
+                                                            it.largeClass.drop(1)
+                                                                .flatMap { it.middleAreas!!.map { it.middleClass[0].middleClassCode == selectedSmallClassName } }
+                                                    }
+
+                                                    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                                                    }
+                                                }
                                         }
 
                                         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -139,10 +165,12 @@ class SearchFragment : Fragment() {
 
                         val ratingBar = view.findViewById<RatingBar>(R.id.ratingbar)
                         val searchBtn = view.findViewById<Button>(R.id.search_button)
+                        val bundle = Bundle()
                         searchBtn.setOnClickListener {
                             val ratingNow = ratingBar.rating.toDouble()
-                            //選択された評価と同じホテル情報取得できてるか怪しい //リサイクラービューのonBindでやるべき?
+                            //選択された評価と同じホテル情報取得、できてるか怪しい //リサイクラービューのonBindでやるべき?
                             hotelInformation.filter { it.reviewAverage.equals(ratingNow) }
+
 
                         }
                     }
