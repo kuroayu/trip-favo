@@ -15,4 +15,5 @@
     <string name="city">市区町村:</string>
     <string name="review_text">レビュー:</string>
     <string name="keyword">キーワード入力</string>
+    <string name="price">円〜</string>
 </resources>

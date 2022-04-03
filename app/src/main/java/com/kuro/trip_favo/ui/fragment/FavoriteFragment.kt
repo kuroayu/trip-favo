@@ -40,7 +40,7 @@ class FavoriteFragment : Fragment() {
         )
         val fab = view.findViewById<FloatingActionButton>(R.id.fab_favo)
         fab.setOnClickListener {
-            findNavController().navigate(R.id.action_favo_to_favoriteSearchFragment2)
+            findNavController().navigate(R.id.action_favo_to_favoriteSearchFragment)
         }
         return view
     }

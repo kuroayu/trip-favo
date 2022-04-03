@@ -9,18 +9,40 @@
         android:name="com.kuro.trip_favo.ui.fragment.FavoriteFragment"
         android:label="@string/favo_fragment">
         <action
-            android:id="@+id/action_favo_to_favoriteSearchFragment2"
+            android:id="@+id/action_favo_to_favoriteSearchFragment"
             app:destination="@id/favoriteSearchFragment" />
+
     </custom_fragment>
 
     <custom_fragment
         android:id="@+id/search"
         android:name="com.kuro.trip_favo.ui.fragment.SearchFragment"
-        android:label="@string/search_fragment" />
+        android:label="@string/search_fragment">
+        <!--        追加変更-->
+        <action
+            android:id="@+id/action_search_to_searchResultFragment"
+            app:destination="@id/searchResultFragment" />
+    </custom_fragment>
+
+    <!--    追加変更-->
+    <custom_fragment
+        android:id="@+id/searchResultFragment"
+        android:name="com.kuro.trip_favo.ui.fragment.SearchResultFragment"
+        android:label="@string/search_fragment">
+        <argument
+            android:name="selectedMiddleClassCode"
+            app:argType="string" />
+        <argument
+            android:name="selectedSmallClassCode"
+            app:argType="string" />
+        <argument
+            android:name="selectedRating"
+            app:argType="integer" />
+    </custom_fragment>
+
     <dialog
         android:id="@+id/favoriteSearchFragment"
         android:name="com.kuro.trip_favo.ui.fragment.FavoriteSearchFragment"
         android:label="FavoriteSearchFragment" />
-
 
 </navigation>
