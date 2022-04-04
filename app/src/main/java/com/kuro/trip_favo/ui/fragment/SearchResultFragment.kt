@@ -56,13 +56,14 @@ class SearchResultFragment : Fragment() {
         })
 
 
-        getHotel(args.selectedMiddleClassCode, args.selectedSmallClassCode)
+        getHotel(args.selectedMiddleClassCode, args.selectedSmallClassCode, args.squeezeCondition)
 
         return view
     }
 
-    fun getHotel(middleClassCode: String, smallClassCode: String) {
-        SearchFragment().createService().getRakutenHotel(middleClassCode, smallClassCode)
+    fun getHotel(middleClassCode: String, smallClassCode: String, squeezeCondition: String) {
+        SearchFragment().createService()
+            .getRakutenHotel(middleClassCode, smallClassCode, squeezeCondition)
             .enqueue(object : retrofit2.Callback<RakutenHotelResult> {
                 override fun onFailure(call: Call<RakutenHotelResult>, t: Throwable) {
                 }

@@ -38,6 +38,9 @@
         <argument
             android:name="selectedRating"
             app:argType="integer" />
+        <argument
+            android:name="squeezeCondition"
+            app:argType="string" />
     </custom_fragment>
 
     <dialog

@@ -1,6 +1,7 @@
 package com.kuro.trip_favo.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ class SearchFragment : Fragment() {
     private var selectedMiddleClassCode: String? = ""
     private var selectedSmallClassCode: String? = ""
     private var selectedRating: Int? = -1
+    private var selectedSwitch: String? = ""
 
 
     override fun onCreateView(
@@ -40,10 +42,24 @@ class SearchFragment : Fragment() {
 
         val searchBtn = view.findViewById<Button>(R.id.search_button)
         val ratingBar = view.findViewById<RatingBar>(R.id.ratingbar)
+        val searchSwitch = view.findViewById<Switch>(R.id.search_onsen_switch)
 
         ratingBar.setOnRatingBarChangeListener { _, rating, _ ->
             selectedRating = rating.toInt()
         }
+
+        searchSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                Log.d("selectedSwitch", "onsen")
+                selectedSwitch = "onsen"
+
+            } else if (!isChecked) {
+                Log.d("selectedSwitch", "null")
+                selectedSwitch = ""
+
+            }
+        }
+
 
 
         searchBtn.setOnClickListener {
@@ -53,7 +69,8 @@ class SearchFragment : Fragment() {
                     SearchFragmentDirections.actionSearchToSearchResultFragment(
                         selectedMiddleClassCode!!,
                         selectedSmallClassCode!!,
-                        selectedRating!!
+                        selectedRating!!,
+                        selectedSwitch!!
                     )
                 )
 
