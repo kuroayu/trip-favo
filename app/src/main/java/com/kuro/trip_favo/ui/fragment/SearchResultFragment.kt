@@ -1,7 +1,11 @@
 package com.kuro.trip_favo.ui.fragment
 
+import HotelBasicInfo
 import RakutenHotelResult
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +45,17 @@ class SearchResultFragment : Fragment() {
                 LinearLayoutManager.VERTICAL
             )
         )
+        adapter.setOnItemClickListener(object : SearchAdapter.OnItemClickListener {
+            override fun onItemClick(view: View, position: Int, data: HotelBasicInfo) {
+                val hotelUrl = Uri.parse(data.hotelInformationUrl)
+                val hotelIntent = Intent(Intent.ACTION_VIEW, hotelUrl)
+                startActivity(hotelIntent)
+                Log.d("intent", this.toString())
+
+            }
+        })
+
+
         getHotel(args.selectedMiddleClassCode, args.selectedSmallClassCode)
 
         return view
@@ -67,10 +82,8 @@ class SearchResultFragment : Fragment() {
                             } else {
                                 adapter.setHotelInfo(hotelInfo)
                             }
-
                             adapter.notifyDataSetChanged()
 
-                            //filter
                         }
 
                     }

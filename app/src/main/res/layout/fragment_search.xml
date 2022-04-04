@@ -113,7 +113,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginStart="20dp"
         android:switchMinWidth="60dp"
-        android:checked="true"
+        android:checked="false"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <Button

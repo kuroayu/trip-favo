@@ -15,6 +15,7 @@ class SearchAdapter() :
     RecyclerView.Adapter<SearchViewHolder>() {
 
     private var hotelBasicInfo: List<HotelBasicInfo> = emptyList()
+    lateinit var listener: OnItemClickListener
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
@@ -32,6 +33,21 @@ class SearchAdapter() :
         holder.address.text = hotelData.address1 + hotelData.address2
         holder.image.load(hotelData.hotelImageUrl)
         holder.ratingBar.rating = hotelData.reviewAverage.toFloat()
+        holder.itemView.setOnClickListener {
+            //interfaceとかを使わずにここにクリックイベント処理かけないのはなんで
+            //あ、書けないわけではなくてdataBindするとこに書くことでもないってことか？
+            listener.onItemClick(it, position, hotelData)
+        }
+    }
+
+    //Adapterのinterfaceをoverride的なのかと思いきや自作っぽい
+    interface OnItemClickListener {
+        fun onItemClick(view: View, position: Int, data: HotelBasicInfo)
+    }
+
+    //これfragmentに書くじゃダメなの
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
     }
 
 
