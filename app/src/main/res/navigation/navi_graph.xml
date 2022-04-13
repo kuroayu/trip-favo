@@ -30,10 +30,13 @@
         android:name="com.kuro.trip_favo.ui.fragment.SearchResultFragment"
         android:label="@string/search_fragment">
         <argument
-            android:name="selectedMiddleClassCode"
+            android:name="middleClassCode"
             app:argType="string" />
         <argument
-            android:name="selectedSmallClassCode"
+            android:name="smallClassCode"
+            app:argType="string" />
+        <argument
+            android:name="detailClassCode"
             app:argType="string" />
         <argument
             android:name="selectedRating"

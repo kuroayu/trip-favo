@@ -1,27 +1,26 @@
 package com.kuro.trip_favo.ui.fragment
 
 import HotelBasicInfo
-import RakutenHotelResult
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kuro.trip_favo.R
 import com.kuro.trip_favo.ui.SearchAdapter
-import retrofit2.Call
-import retrofit2.Response
+import com.kuro.trip_favo.ui.viewModel.SearchResultViewModel
 
 
 class SearchResultFragment : Fragment() {
 
+    private val viewModel: SearchResultViewModel by viewModels()
     private val args: SearchResultFragmentArgs by navArgs()
     private val adapter = SearchAdapter()
 
@@ -50,47 +49,24 @@ class SearchResultFragment : Fragment() {
                 val hotelUrl = Uri.parse(data.hotelInformationUrl)
                 val hotelIntent = Intent(Intent.ACTION_VIEW, hotelUrl)
                 startActivity(hotelIntent)
-                Log.d("intent", this.toString())
-
             }
         })
 
+        viewModel.init(
+            args.middleClassCode,
+            args.smallClassCode,
+            args.detailClassCode,
+            args.squeezeCondition
+        )
+        viewModel.hotelList.observe(viewLifecycleOwner) {
+            val ratingSearchHotelInfo =
+                it.filter { it.reviewAverage >= args.selectedRating.toDouble() }
+            adapter.setHotelInfo(ratingSearchHotelInfo)
+            adapter.notifyDataSetChanged()
+        }
 
-        getHotel(args.selectedMiddleClassCode, args.selectedSmallClassCode, args.squeezeCondition)
 
         return view
-    }
-
-    fun getHotel(middleClassCode: String, smallClassCode: String, squeezeCondition: String) {
-        SearchFragment().createService()
-            .getRakutenHotel(middleClassCode, smallClassCode, squeezeCondition)
-            .enqueue(object : retrofit2.Callback<RakutenHotelResult> {
-                override fun onFailure(call: Call<RakutenHotelResult>, t: Throwable) {
-                }
-
-                override fun onResponse(
-                    call: Call<RakutenHotelResult>,
-                    response: Response<RakutenHotelResult>
-                ) {
-                    if (response.isSuccessful) {
-                        response.body()?.let {
-                            val hotelInfo = it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo } }
-                            val selectedRating = args.selectedRating
-                            if (selectedRating != -1) {
-                                val ratingSearchHotelInfo =
-                                    hotelInfo.filter { it.reviewAverage >= selectedRating.toDouble() }
-                                adapter.setHotelInfo(ratingSearchHotelInfo)
-                            } else {
-                                adapter.setHotelInfo(hotelInfo)
-                            }
-                            adapter.notifyDataSetChanged()
-
-                        }
-
-                    }
-                }
-            }
-            )
     }
 }
 

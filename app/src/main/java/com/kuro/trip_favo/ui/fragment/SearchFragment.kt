@@ -2,192 +2,113 @@ package com.kuro.trip_favo.ui.fragment
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.kuro.trip_favo.R
-import com.kuro.trip_favo.data.api.RakutenAreaResult
-import com.kuro.trip_favo.data.api.RakutenService
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Response
-import retrofit2.Retrofit
+import com.kuro.trip_favo.databinding.FragmentSearchBinding
+import com.kuro.trip_favo.ui.viewModel.SearchViewModel
 
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(R.layout.fragment_search) {
 
-    private var selectedMiddleClassCode: String? = ""
-    private var selectedSmallClassCode: String? = ""
+
     private var selectedRating: Int? = -1
-    private var selectedSwitch: String? = ""
+    private var squeezeCondition: String? = ""
+
+    private val middleAreaAdapter by lazy {
+        ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            mutableListOf<String>()
+        )
+    }
+
+    private val smallAreaAdapter by lazy {
+        ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            mutableListOf<String>()
+        )
+    }
+
+    private val detailAreaAdapter by lazy {
+        ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            mutableListOf<String>()
+        )
+    }
+
+    private val viewModel: SearchViewModel by viewModels()
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentSearchBinding.bind(view)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        val view = inflater.inflate(R.layout.fragment_search, container, false)
+        binding.middleSpinner.adapter = middleAreaAdapter
+        binding.smallSpinner.adapter = smallAreaAdapter
+        binding.detailSpinner.adapter = detailAreaAdapter
 
-        getArea(view)
 
-        val searchBtn = view.findViewById<Button>(R.id.search_button)
-        val ratingBar = view.findViewById<RatingBar>(R.id.ratingbar)
-        val searchSwitch = view.findViewById<Switch>(R.id.search_onsen_switch)
 
-        ratingBar.setOnRatingBarChangeListener { _, rating, _ ->
+        viewModel.middleAreaNameList.observe(viewLifecycleOwner) {
+            middleAreaAdapter.clear()
+            middleAreaAdapter.addAll(it)
+            middleAreaAdapter.notifyDataSetChanged()
+            Log.d("smallName", it.toString())
+        }
+        viewModel.smallAreaNameList.observe(viewLifecycleOwner) {
+            smallAreaAdapter.clear()
+            smallAreaAdapter.addAll(it)
+            smallAreaAdapter.notifyDataSetChanged()
+            Log.d("smallName", it.toString())
+        }
+
+        viewModel.detailAreaNameList.observe(viewLifecycleOwner) {
+            detailAreaAdapter.clear()
+            detailAreaAdapter.addAll(it)
+            detailAreaAdapter.notifyDataSetChanged()
+            Log.d("detailName", it.toString())
+        }
+
+        binding.ratingbar.setOnRatingBarChangeListener { _, rating, _ ->
             selectedRating = rating.toInt()
         }
 
-        searchSwitch.setOnCheckedChangeListener { _, isChecked ->
+        binding.searchOnsenSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 Log.d("selectedSwitch", "onsen")
-                selectedSwitch = "onsen"
+                squeezeCondition = "onsen"
 
             } else if (!isChecked) {
                 Log.d("selectedSwitch", "null")
-                selectedSwitch = ""
+                squeezeCondition = ""
 
             }
         }
 
+        binding.searchButton.setOnClickListener {
+            val middleClassCode = viewModel.getMiddleAreaCode() ?: return@setOnClickListener
+            val smallClassCode = viewModel.getSmallAreaCode() ?: return@setOnClickListener
+            val detailClassCode = viewModel.getDetailAreaCode() ?: ""
 
-
-        searchBtn.setOnClickListener {
-            if (selectedMiddleClassCode != null && selectedSmallClassCode != null && selectedRating != null) {
-
-                findNavController().navigate(
-                    SearchFragmentDirections.actionSearchToSearchResultFragment(
-                        selectedMiddleClassCode!!,
-                        selectedSmallClassCode!!,
-                        selectedRating!!,
-                        selectedSwitch!!
-                    )
+            findNavController().navigate(
+                SearchFragmentDirections.actionSearchToSearchResultFragment(
+                    middleClassCode,
+                    smallClassCode,
+                    detailClassCode,
+                    selectedRating!!,
+                    squeezeCondition!!
                 )
-
-            }
-        }
-        return view
-    }
-
-
-    fun createService(): RakutenService {
-        val httpClient = OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    this.level = HttpLoggingInterceptor.Level.BODY
-                }
             )
-            .build()
-        val contentType = "application/json".toMediaType()
-        val format = Json { ignoreUnknownKeys = true }
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://app.rakuten.co.jp")
-            .client(httpClient)
-            .addConverterFactory(format.asConverterFactory(contentType))
-            .build()
-        return retrofit.create(RakutenService::class.java)
-    }
 
-    //地域コードの取得
-    fun getArea(view: View) {
-        createService().getRakutenArea().enqueue(object : retrofit2.Callback<RakutenAreaResult> {
-            override fun onFailure(call: Call<RakutenAreaResult>, t: Throwable) {
-            }
+        }
 
-            override fun onResponse(
-                call: Call<RakutenAreaResult>,
-                response: Response<RakutenAreaResult>
-            ) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        it.areaClasses.largeAreas.find { it.largeClass[0].largeClassCode == "japan" }
-                            ?.let {
-                                val middleAreaLists = it.largeClass.drop(1).flatMap {
-                                    it.middleAreas!!.map { it.middleClass[0].middleClassName }
-                                }
-                                val middleAreaSpinner =
-                                    view.findViewById<Spinner>(R.id.Middle_spinner)
-                                val middleAreaAdapter = ArrayAdapter(
-                                    requireContext(),
-                                    android.R.layout.simple_spinner_dropdown_item,
-                                    middleAreaLists,
-                                )
-                                middleAreaSpinner.adapter = middleAreaAdapter
-                                middleAreaSpinner.onItemSelectedListener =
-                                    object : AdapterView.OnItemSelectedListener {
-                                        override fun onItemSelected(
-                                            parent: AdapterView<*>,
-                                            v: View?,
-                                            position: Int,
-                                            id: Long
-                                        ) {
-                                            val selectedMiddlePosition =
-                                                parent.getItemAtPosition(position)
-
-                                            selectedMiddleClassCode = it.largeClass[1]
-                                                .middleAreas!!
-                                                .find { it.middleClass[0].middleClassName == selectedMiddlePosition.toString() }
-                                                ?.middleClass?.get(0)?.middleClassCode
-
-                                            val smallAreaLists = it.largeClass.drop(1).flatMap {
-                                                it.middleAreas?.find { it.middleClass[0].middleClassName == selectedMiddlePosition.toString() }
-                                                    ?.let {
-                                                        it.middleClass.drop(1).flatMap {
-                                                            it.smallAreas!!.map { it.smallClass[0].smallClassName }
-                                                        }
-                                                    } ?: emptyList()
-                                            }
-                                            val smallAreaSpinner =
-                                                view.findViewById<Spinner>(R.id.small_spinner)
-                                            val smallAreaAdapter = ArrayAdapter(
-                                                requireContext(),
-                                                android.R.layout.simple_spinner_dropdown_item,
-                                                smallAreaLists
-                                            )
-                                            smallAreaAdapter.notifyDataSetChanged()
-                                            smallAreaSpinner?.adapter = smallAreaAdapter
-
-                                            smallAreaSpinner.onItemSelectedListener =
-                                                object : AdapterView.OnItemSelectedListener {
-                                                    override fun onItemSelected(
-                                                        parent: AdapterView<*>,
-                                                        view: View?,
-                                                        position: Int,
-                                                        id: Long
-                                                    ) {
-                                                        val selectedSmallPosition =
-                                                            parent.getItemAtPosition(position)
-                                                        selectedSmallClassCode =
-                                                            it.largeClass[1].middleAreas
-                                                                ?.find { it.middleClass[0].middleClassName == selectedMiddlePosition.toString() }
-                                                                ?.middleClass?.get(1)?.smallAreas
-                                                                ?.find { it.smallClass[0].smallClassName == selectedSmallPosition.toString() }
-                                                                ?.smallClass?.get(0)?.smallClassCode
-                                                    }
-
-                                                    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                                                    }
-                                                }
-                                        }
-
-                                        override fun onNothingSelected(parent: AdapterView<*>?) {
-                                        }
-                                    }
-                            }
-                    }
-                }
-            }
-        })
     }
 }

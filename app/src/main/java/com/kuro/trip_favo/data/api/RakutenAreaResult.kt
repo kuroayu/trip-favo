@@ -48,6 +48,20 @@ data class SmallArea(
 @Serializable
 data class SmallClass(
     val smallClassCode: String? = null,
-    val smallClassName: String? = null
+    val smallClassName: String? = null,
+    @SerialName("detailClasses")
+    val detailAreas: List<DetailArea>? = null
 )
+
+@Serializable
+data class DetailArea(
+    val detailClass: DetailClass
+)
+
+@Serializable
+data class DetailClass(
+    val detailClassCode: String,
+    val detailClassName: String
+)
+
 

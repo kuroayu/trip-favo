@@ -1,17 +1,20 @@
 package com.kuro.trip_favo.data.api
 
 import RakutenHotelResult
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface RakutenService {
     @GET("/services/api/Travel/SimpleHotelSearch/20170426?format=json&largeClassCode=japan&elements=hotelBasicInfo&applicationId=1074940900517142254")
-    fun getRakutenHotel(
+    suspend fun getRakutenHotel(
         @Query("middleClassCode") middleClassCode: String,
         @Query("smallClassCode") smallClassCode: String,
+        @Query("detailClassCode") detailClassCode: String,
         @Query("squeezeCondition") squeezeCondition: String?
-    ): retrofit2.Call<RakutenHotelResult>
+    ): Response<RakutenHotelResult>
+
 
     @GET("/services/api/Travel/GetAreaClass/20131024?format=json&applicationId=1074940900517142254")
-    fun getRakutenArea(): retrofit2.Call<RakutenAreaResult>
+    suspend fun getRakutenArea(): Response<RakutenAreaResult>
 }
