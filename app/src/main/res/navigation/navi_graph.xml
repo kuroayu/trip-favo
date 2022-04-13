@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navi_graph"
     app:startDestination="@id/favo">
 
@@ -10,17 +11,23 @@
         android:label="@string/favo_fragment">
         <action
             android:id="@+id/action_favo_to_favoriteSearchFragment2"
-            app:destination="@id/favoriteSearchFragment" />
+            app:destination="@id/search" />
     </custom_fragment>
 
     <custom_fragment
         android:id="@+id/search"
         android:name="com.kuro.trip_favo.ui.fragment.SearchFragment"
-        android:label="@string/search_fragment" />
-    <dialog
-        android:id="@+id/favoriteSearchFragment"
-        android:name="com.kuro.trip_favo.ui.fragment.FavoriteSearchFragment"
-        android:label="FavoriteSearchFragment" />
+        android:label="@string/search_fragment">
+        <action
+            android:id="@+id/action_search_to_searchResultFragment"
+            app:destination="@id/searchResultFragment" />
+    </custom_fragment>
+
+    <custom_fragment
+        android:id="@+id/searchResultFragment"
+        android:name="com.kuro.trip_favo.ui.fragment.SearchResultFragment"
+        android:label="検索結果"
+        tools:layout="@layout/fragment_search_result" />
 
 
 </navigation>
