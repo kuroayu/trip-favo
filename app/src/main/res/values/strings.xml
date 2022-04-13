@@ -11,8 +11,10 @@
     <string name="old">古い順</string>
     <string name="search">検索</string>
     <string name="area">地域:</string>
-    <string name="prefecture">県:</string>
-    <string name="city">市:</string>
+    <string name="prefecture">都道府県:</string>
+    <string name="city">市区町村:</string>
+    <string name="detail">地区詳細:</string>
     <string name="review_text">レビュー:</string>
     <string name="keyword">キーワード入力</string>
+    <string name="price">円〜</string>
 </resources>
