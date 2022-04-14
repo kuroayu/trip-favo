@@ -2,10 +2,10 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navi_graph"
-    app:startDestination="@id/favo">
+    app:startDestination="@id/favorite">
 
     <custom_fragment
-        android:id="@+id/favo"
+        android:id="@+id/favorite"
         android:name="com.kuro.trip_favo.ui.fragment.FavoriteFragment"
         android:label="@string/favo_fragment">
         <action
