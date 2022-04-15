@@ -38,6 +38,9 @@ class SearchAdapter() :
             //あ、書けないわけではなくてdataBindするとこに書くことでもないってことか？
             listener.onItemClick(it, position, hotelData)
         }
+        holder.favoriteButton.setOnClickListener {
+            listener.onItemClick(it, position, hotelData)
+        }
     }
 
     //Adapterのinterfaceをoverride的なのかと思いきや自作っぽい
@@ -65,9 +68,11 @@ class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val price: TextView = itemView.findViewById(R.id.search_price)
     val address: TextView = itemView.findViewById(R.id.search_address)
     val ratingBar: RatingBar = itemView.findViewById(R.id.search_ratingbar)
+    val favoriteButton: ImageView = itemView.findViewById(R.id.favorite_button)
 
     //var出ないとbind出来ない
     var image: ImageView = itemView.findViewById(R.id.search_image)
+
 }
 
 
