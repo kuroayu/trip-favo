@@ -56,15 +56,29 @@ class SearchResultFragment : Fragment() {
                 val animation =
                     AnimationUtils.loadAnimation(requireContext(), R.anim.favorite_button_animation)
 
-                val favoriteButton = view.findViewById<ImageView>(R.id.favorite_button).apply {
-                    setBackgroundResource(R.drawable.favorite_animation_list)
-                    favoriteAnimation = background as AnimationDrawable
-                }
+                val favoriteButton = view.findViewById<ImageView>(R.id.favorite_button)
+
 
                 when (view) {
                     favoriteButton -> {
-                        favoriteButton.startAnimation(animation)
-                        favoriteAnimation.start()
+                        if (!favoriteButton.isSelected) {
+                            favoriteButton.isSelected = true
+                            favoriteButton.apply {
+                                setBackgroundResource(R.drawable.change_active_favorite_button)
+                                favoriteAnimation = background as AnimationDrawable
+                            }
+                            favoriteButton.startAnimation(animation)
+                            favoriteAnimation.start()
+
+                        } else if (favoriteButton.isSelected) {
+                            favoriteButton.isSelected = false
+                            favoriteButton.apply {
+                                setBackgroundResource(R.drawable.change_nomal_favorite_button)
+                                favoriteAnimation = background as AnimationDrawable
+                            }
+                            favoriteButton.startAnimation(animation)
+                            favoriteAnimation.start()
+                        }
                     }
                     else -> startActivity(hotelIntent)
                 }
