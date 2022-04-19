@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.kuro.trip_favo.R
 
-class SearchAdapter() :
+class SearchAdapter :
     RecyclerView.Adapter<SearchViewHolder>() {
 
     private var hotelBasicInfo: List<HotelBasicInfo> = emptyList()

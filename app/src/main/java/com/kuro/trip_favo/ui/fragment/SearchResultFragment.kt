@@ -2,7 +2,6 @@ package com.kuro.trip_favo.ui.fragment
 
 import HotelBasicInfo
 import android.content.Intent
-import android.graphics.drawable.AnimationDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,7 +22,6 @@ import com.kuro.trip_favo.ui.viewModel.SearchResultViewModel
 
 class SearchResultFragment : Fragment() {
 
-    lateinit var favoriteAnimation: AnimationDrawable
     private val viewModel: SearchResultViewModel by viewModels()
     private val args: SearchResultFragmentArgs by navArgs()
     private val adapter = SearchAdapter()
@@ -58,27 +56,11 @@ class SearchResultFragment : Fragment() {
 
                 val favoriteButton = view.findViewById<ImageView>(R.id.favorite_button)
 
-
                 when (view) {
                     favoriteButton -> {
-                        if (!favoriteButton.isSelected) {
-                            favoriteButton.isSelected = true
-                            favoriteButton.apply {
-                                setBackgroundResource(R.drawable.change_active_favorite_button)
-                                favoriteAnimation = background as AnimationDrawable
-                            }
-                            favoriteButton.startAnimation(animation)
-                            favoriteAnimation.start()
-
-                        } else if (favoriteButton.isSelected) {
-                            favoriteButton.isSelected = false
-                            favoriteButton.apply {
-                                setBackgroundResource(R.drawable.change_nomal_favorite_button)
-                                favoriteAnimation = background as AnimationDrawable
-                            }
-                            favoriteButton.startAnimation(animation)
-                            favoriteAnimation.start()
-                        }
+                        viewModel.favoriteButton(favoriteButton)
+                        favoriteButton.startAnimation(animation)
+                        viewModel.favoriteAnimation.start()
                     }
                     else -> startActivity(hotelIntent)
                 }
