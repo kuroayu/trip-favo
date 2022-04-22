@@ -2,6 +2,7 @@ package com.kuro.trip_favo.ui.fragment
 
 import HotelBasicInfo
 import android.content.Intent
+import android.graphics.drawable.AnimationDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,15 +17,23 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kuro.trip_favo.R
+import com.kuro.trip_favo.data.database.FavoriteApplication
 import com.kuro.trip_favo.ui.SearchAdapter
 import com.kuro.trip_favo.ui.viewModel.SearchResultViewModel
+import com.kuro.trip_favo.ui.viewModel.SearchResultViewModelFactory
 
 
 class SearchResultFragment : Fragment() {
 
-    private val viewModel: SearchResultViewModel by viewModels()
+    private val viewModel: SearchResultViewModel by viewModels {
+        val application = requireActivity().application as FavoriteApplication
+        SearchResultViewModelFactory(
+            application.favoriteHotelRepository,
+            application.hotelRepository
+        )
+    }
     private val args: SearchResultFragmentArgs by navArgs()
-    private val adapter = SearchAdapter()
+    private val searchAdapter = SearchAdapter()
 
 
     override fun onCreateView(
@@ -38,7 +47,7 @@ class SearchResultFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(view.context)
         val recyclerView = view.findViewById<RecyclerView>(R.id.search_recyclerview)
 
-        recyclerView.adapter = adapter
+        recyclerView.adapter = searchAdapter
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -46,21 +55,36 @@ class SearchResultFragment : Fragment() {
                 LinearLayoutManager.VERTICAL
             )
         )
-        adapter.setOnItemClickListener(object : SearchAdapter.OnItemClickListener {
+        searchAdapter.setOnItemClickListener(object : SearchAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int, data: HotelBasicInfo) {
 
                 val hotelUrl = Uri.parse(data.hotelInformationUrl)
                 val hotelIntent = Intent(Intent.ACTION_VIEW, hotelUrl)
                 val animation =
                     AnimationUtils.loadAnimation(requireContext(), R.anim.favorite_button_animation)
-
                 val favoriteButton = view.findViewById<ImageView>(R.id.favorite_button)
+
+
 
                 when (view) {
                     favoriteButton -> {
-                        viewModel.favoriteButton(favoriteButton)
                         favoriteButton.startAnimation(animation)
-                        viewModel.favoriteAnimation.start()
+
+                        if (!favoriteButton.isSelected) {
+                            favoriteButton.isSelected = true
+                            favoriteButton.apply {
+                                setBackgroundResource(R.drawable.change_active_favorite_button)
+                                (background as AnimationDrawable).start()
+
+                            }
+                        } else if (favoriteButton.isSelected) {
+                            favoriteButton.isSelected = false
+                            favoriteButton.apply {
+                                setBackgroundResource(R.drawable.change_nomal_favorite_button)
+                                (background as AnimationDrawable).start()
+                            }
+                        }
+                        viewModel.insert(data)
                     }
                     else -> startActivity(hotelIntent)
                 }
@@ -77,8 +101,8 @@ class SearchResultFragment : Fragment() {
         viewModel.hotelList.observe(viewLifecycleOwner) {
             val ratingSearchHotelInfo =
                 it.filter { it.reviewAverage >= args.selectedRating.toDouble() }
-            adapter.setHotelInfo(ratingSearchHotelInfo)
-            adapter.notifyDataSetChanged()
+            searchAdapter.setHotelInfo(ratingSearchHotelInfo)
+            searchAdapter.notifyDataSetChanged()
         }
 
         return view

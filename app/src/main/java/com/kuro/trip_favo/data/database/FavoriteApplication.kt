@@ -2,12 +2,14 @@ package com.kuro.trip_favo.data.database
 
 import android.app.Application
 import com.kuro.trip_favo.data.repositry.FavoriteHotelRepository
+import com.kuro.trip_favo.data.repositry.HotelRepository
 
 class FavoriteApplication : Application() {
 
-    val database by lazy { FavoriteHotelDatabase.getDatabase(this) }
+    private val database by lazy { FavoriteHotelDatabase.getDatabase(this) }
 
     //favoriteHotelRepositoryのコンストラクタでrepositoryとdaoを紐づけているのにここでもまた？
-    val repository by lazy { FavoriteHotelRepository(database.favoriteHotelDao()) }
+    val favoriteHotelRepository by lazy { FavoriteHotelRepository(database.favoriteHotelDao()) }
 
+    val hotelRepository by lazy { HotelRepository() }
 }

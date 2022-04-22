@@ -1,3 +1,4 @@
+import com.kuro.trip_favo.data.database.FavoriteHotel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -25,4 +26,19 @@ data class HotelBasicInfo(
     val hotelName: String, //ホテル名 必要
     val hotelNo: Int,
     val reviewAverage: Double, //星評価 必要
-)
+) {
+    fun toFavoriteHotel(date: Long, onsen: Int): FavoriteHotel {
+        return FavoriteHotel(
+            hotelNo,
+            date,
+            onsen,
+            hotelName,
+            hotelImageUrl,
+            hotelInformationUrl,
+            address1,
+            address2,
+            reviewAverage,
+            hotelMinCharge.toDouble()
+        )
+    }
+}

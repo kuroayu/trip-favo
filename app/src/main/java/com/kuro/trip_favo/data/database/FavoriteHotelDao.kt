@@ -8,7 +8,7 @@ import androidx.room.Query
 
 @Dao
 interface FavoriteHotelDao {
-    @Query("SELECT * FROM hotel_table ORDER BY id DESC")
+    @Query("SELECT * FROM hotel_table ORDER BY hotelNumber DESC")
     fun AllHotelData(): LiveData<List<FavoriteHotel>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

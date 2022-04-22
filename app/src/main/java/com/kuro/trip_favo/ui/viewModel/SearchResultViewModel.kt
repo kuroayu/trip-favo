@@ -2,19 +2,18 @@ package com.kuro.trip_favo.ui.viewModel
 
 import HotelBasicInfo
 import RakutenHotelResult
-import android.graphics.drawable.AnimationDrawable
-import android.view.View
 import androidx.lifecycle.*
-import com.kuro.trip_favo.R
-import com.kuro.trip_favo.data.database.FavoriteHotel
 import com.kuro.trip_favo.data.repositry.FavoriteHotelRepository
 import com.kuro.trip_favo.data.repositry.HotelRepository
 import kotlinx.coroutines.launch
 
-class SearchResultViewModel(private val hotelRepository: HotelRepository = HotelRepository()) :
+class SearchResultViewModel(
+    private val favoriteHotelRepository: FavoriteHotelRepository,
+    private val hotelRepository: HotelRepository
+) :
     ViewModel() {
 
-    lateinit var favoriteHotelRepository: FavoriteHotelRepository
+
     private val _hotelResult: MutableLiveData<RakutenHotelResult> = MutableLiveData()
 
     val hotelList: LiveData<List<HotelBasicInfo>> = _hotelResult.map {
@@ -22,9 +21,6 @@ class SearchResultViewModel(private val hotelRepository: HotelRepository = Hotel
     }
 
     private var onsen = 2
-
-    private var _favoriteAnimation = AnimationDrawable()
-    val favoriteAnimation = _favoriteAnimation
 
     private val _isError: MutableLiveData<Boolean> = MutableLiveData(false)
     val isError: LiveData<Boolean> = _isError
@@ -61,32 +57,28 @@ class SearchResultViewModel(private val hotelRepository: HotelRepository = Hotel
         }
     }
 
-    fun favoriteButton(favoriteButton: View) {
-        
-        if (!favoriteButton.isSelected) {
-            favoriteButton.isSelected = true
-            favoriteButton.apply {
-                setBackgroundResource(R.drawable.change_active_favorite_button)
-                _favoriteAnimation = background as AnimationDrawable
-            }
-        } else if (favoriteButton.isSelected) {
-            favoriteButton.isSelected = false
-            favoriteButton.apply {
-                setBackgroundResource(R.drawable.change_nomal_favorite_button)
-                _favoriteAnimation = background as AnimationDrawable
-            }
 
+    fun insert(data: HotelBasicInfo) {
+        viewModelScope.launch {
+
+            val date = System.currentTimeMillis()
+            val favoriteHotel = data.toFavoriteHotel(date, onsen)
+
+            favoriteHotelRepository.insert(favoriteHotel)
         }
     }
+}
 
-
-    fun insert(hotelData: FavoriteHotel) = viewModelScope.launch {
-        favoriteHotelRepository.insert(hotelData)
+class SearchResultViewModelFactory(
+    private val favoriteHotelRepository: FavoriteHotelRepository,
+    private val hotelRepository: HotelRepository
+) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(SearchResultViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return SearchResultViewModel(favoriteHotelRepository, hotelRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
-
-    fun favoriteHotelData() {
-        onsen
-    }
-
-
 }
