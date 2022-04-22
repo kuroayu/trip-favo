@@ -38,7 +38,7 @@ data class HotelBasicInfo(
             address1,
             address2,
             reviewAverage,
-            hotelMinCharge.toDouble()
+            hotelMinCharge
         )
     }
 }

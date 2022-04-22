@@ -16,6 +16,6 @@ data class FavoriteHotel(
     val address1: String,
     val address2: String,
     val reviewAverage: Double,
-    val hotelMinCharge: Double
+    val hotelMinCharge: Int
 )
 
