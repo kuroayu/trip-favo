@@ -1,5 +1,7 @@
 package com.kuro.trip_favo.ui.fragment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.kuro.trip_favo.R
 import com.kuro.trip_favo.data.database.FavoriteApplication
+import com.kuro.trip_favo.data.database.FavoriteHotel
 import com.kuro.trip_favo.ui.FavoriteListAdapter
 import com.kuro.trip_favo.ui.viewModel.FavoriteHotelViewModel
 import com.kuro.trip_favo.ui.viewModel.FavoriteHotelViewModelFactory
@@ -27,6 +30,8 @@ class FavoriteFragment : Fragment() {
         )
     }
 
+    private val favoriteAdapter = FavoriteListAdapter()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +45,6 @@ class FavoriteFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(requireContext())
         val recyclerView = view.findViewById<RecyclerView>(R.id.fovo_recyclerview)
 
-        val favoriteAdapter = FavoriteListAdapter()
 
         recyclerView.adapter = favoriteAdapter
         recyclerView.layoutManager = linearLayoutManager
@@ -55,6 +59,15 @@ class FavoriteFragment : Fragment() {
             favoriteAdapter.setHotel(hotel)
             favoriteAdapter.notifyDataSetChanged()
         }
+
+        favoriteAdapter.setOnItemClickListener(object : FavoriteListAdapter.OnItemClickListener {
+            override fun onItemClick(view: View, position: Int, data: FavoriteHotel) {
+                val favoriteHotelUrl = Uri.parse(data.informationUrl)
+                val favoriteHotelIntent = Intent(Intent.ACTION_VIEW, favoriteHotelUrl)
+
+                startActivity(favoriteHotelIntent)
+            }
+        })
 
 
         val fab = view.findViewById<FloatingActionButton>(R.id.fab_favo)

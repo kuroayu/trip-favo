@@ -15,6 +15,7 @@ import com.kuro.trip_favo.data.database.FavoriteHotel
 class FavoriteListAdapter() :
     RecyclerView.Adapter<FavoriteViewHolder>() {
 
+    lateinit var listener: FavoriteListAdapter.OnItemClickListener
     private var favoriteHotel: List<FavoriteHotel> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
@@ -32,6 +33,17 @@ class FavoriteListAdapter() :
         holder.address.text = favoriteHotelList.address1 + favoriteHotelList.address2
         holder.ratingBar.rating = favoriteHotelList.reviewAverage.toFloat()
         holder.image.load(favoriteHotelList.imageUrl)
+        holder.itemView.setOnClickListener {
+            listener.onItemClick(it, position, favoriteHotelList)
+        }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(view: View, position: Int, data: FavoriteHotel)
+    }
+
+    fun setOnItemClickListener(listener: FavoriteListAdapter.OnItemClickListener) {
+        this.listener = listener
     }
 
     override fun getItemCount(): Int {
