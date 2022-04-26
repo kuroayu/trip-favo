@@ -5,17 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kuro.trip_favo.R
 import com.kuro.trip_favo.databinding.FragmentFavoriteSearchBinding
-import com.kuro.trip_favo.ui.viewModel.FavoriteSearchViewModel
+import com.kuro.trip_favo.ui.viewModel.FavoriteHotelViewModel
 
 
 class FavoriteSearchFragment : BottomSheetDialogFragment() {
 
     lateinit var binding: FragmentFavoriteSearchBinding
-    private val viewModel: FavoriteSearchViewModel by viewModels()
+    private val viewModel: FavoriteHotelViewModel by activityViewModels()
+    
 
     private val orderAdapter by lazy {
         ArrayAdapter(
@@ -36,17 +38,25 @@ class FavoriteSearchFragment : BottomSheetDialogFragment() {
         binding = FragmentFavoriteSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
-    
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.favoriteSearchViewModel = viewModel
+
+        binding.favoriteHotelViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.favoriteOrderSpinner.adapter = orderAdapter
+
+        binding.favoriteSearchButton.setOnClickListener {
+
+            viewModel.selectedOrder(viewModel.allHotelData.value!!)
+
+
+            findNavController().navigate(R.id.favorite).apply { }
+        }
+
     }
 
-
 }
-

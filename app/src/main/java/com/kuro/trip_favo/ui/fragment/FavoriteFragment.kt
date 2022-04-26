@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,15 +22,12 @@ import com.kuro.trip_favo.ui.viewModel.FavoriteHotelViewModelFactory
 
 class FavoriteFragment : Fragment() {
 
-
-    private val viewModel: FavoriteHotelViewModel by viewModels {
+    private val viewModel: FavoriteHotelViewModel by activityViewModels {
         val application = requireActivity().application as FavoriteApplication
         FavoriteHotelViewModelFactory(
             application.favoriteHotelRepository
         )
     }
-
-    private val favoriteAdapter = FavoriteListAdapter()
 
 
     override fun onCreateView(
@@ -40,13 +37,14 @@ class FavoriteFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
+
         //DataBindingにする
         val view = inflater.inflate(R.layout.fragment_favorite, container, false)
         val linearLayoutManager = LinearLayoutManager(requireContext())
         val recyclerView = view.findViewById<RecyclerView>(R.id.fovo_recyclerview)
 
 
-        recyclerView.adapter = favoriteAdapter
+        recyclerView.adapter = viewModel.favoriteAdapter
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -55,12 +53,19 @@ class FavoriteFragment : Fragment() {
             )
         )
 
+
         viewModel.allHotelData.observe(viewLifecycleOwner) { hotel ->
-            favoriteAdapter.setHotel(hotel)
-            favoriteAdapter.notifyDataSetChanged()
+            if (viewModel.selectedOrderPosition.value == 0) {
+                viewModel.favoriteAdapter.setHotel(hotel)
+                viewModel.favoriteAdapter.notifyDataSetChanged()
+            } else {
+                viewModel.favoriteAdapter.setHotel(viewModel.favoriteOrderLists)
+                viewModel.favoriteAdapter.notifyDataSetChanged()
+            }
         }
 
-        favoriteAdapter.setOnItemClickListener(object : FavoriteListAdapter.OnItemClickListener {
+        viewModel.favoriteAdapter.setOnItemClickListener(object :
+            FavoriteListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int, data: FavoriteHotel) {
                 val favoriteHotelUrl = Uri.parse(data.informationUrl)
                 val favoriteHotelIntent = Intent(Intent.ACTION_VIEW, favoriteHotelUrl)
@@ -72,9 +77,11 @@ class FavoriteFragment : Fragment() {
 
         val fab = view.findViewById<FloatingActionButton>(R.id.fab_favo)
         fab.setOnClickListener {
-            findNavController().navigate(R.id.action_favo_to_favoriteSearchFragment)
+            findNavController().navigate(R.id.action_favorite_to_favoriteSearchFragment)
         }
         return view
     }
 
+
 }
+
