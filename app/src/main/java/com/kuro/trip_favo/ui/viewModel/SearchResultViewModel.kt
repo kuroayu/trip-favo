@@ -2,6 +2,7 @@ package com.kuro.trip_favo.ui.viewModel
 
 import HotelBasicInfo
 import RakutenHotelResult
+import android.util.Log
 import androidx.lifecycle.*
 import com.kuro.trip_favo.data.repositry.FavoriteHotelRepository
 import com.kuro.trip_favo.data.repositry.HotelRepository
@@ -20,7 +21,7 @@ class SearchResultViewModel(
         it.hotels.flatMap { it.hotel.map { it.hotelBasicInfo } }
     }
 
-    private var onsen = 2
+    private var onsen = 0
 
     private val _isError: MutableLiveData<Boolean> = MutableLiveData(false)
     val isError: LiveData<Boolean> = _isError
@@ -45,9 +46,10 @@ class SearchResultViewModel(
                     _hotelResult.value = it.body()
                     val result = squeezeCondition.isEmpty()
                     onsen = when (result) {
-                        true -> 1
-                        false -> 0
+                        true -> 0
+                        false -> 1
                     }
+                    Log.d("hotelOnsen", onsen.toString())
                 } else {
                     _isError.value = true
                 }

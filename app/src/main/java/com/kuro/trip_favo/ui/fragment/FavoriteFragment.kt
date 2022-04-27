@@ -3,6 +3,7 @@ package com.kuro.trip_favo.ui.fragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,10 +56,16 @@ class FavoriteFragment : Fragment() {
 
 
         viewModel.allHotelData.observe(viewLifecycleOwner) { hotel ->
-            if (viewModel.selectedOrderPosition.value == 0) {
+            Log.d("allHotelData", viewModel.allHotelData.value!!.toString())
+            if (viewModel.selectedOrderPosition.value == 0 && viewModel.onsenData == 0) {
                 viewModel.favoriteAdapter.setHotel(hotel)
                 viewModel.favoriteAdapter.notifyDataSetChanged()
-            } else {
+            }
+//            else if (viewModel.selectedOrderPosition.value == 0 && viewModel.onsenData == 1) {
+//                viewModel.favoriteAdapter.setHotel(viewModel.favoriteOrderLists)
+//                viewModel.favoriteAdapter.notifyDataSetChanged()
+//            }
+            else {
                 viewModel.favoriteAdapter.setHotel(viewModel.favoriteOrderLists)
                 viewModel.favoriteAdapter.notifyDataSetChanged()
             }

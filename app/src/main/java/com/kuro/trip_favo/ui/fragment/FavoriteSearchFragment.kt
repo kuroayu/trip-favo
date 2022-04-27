@@ -1,6 +1,7 @@
 package com.kuro.trip_favo.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,7 @@ class FavoriteSearchFragment : BottomSheetDialogFragment() {
 
     lateinit var binding: FragmentFavoriteSearchBinding
     private val viewModel: FavoriteHotelViewModel by activityViewModels()
-    
+
 
     private val orderAdapter by lazy {
         ArrayAdapter(
@@ -49,12 +50,20 @@ class FavoriteSearchFragment : BottomSheetDialogFragment() {
 
         binding.favoriteOrderSpinner.adapter = orderAdapter
 
+        binding.favoriteOnsenSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                viewModel.onsenData = 1
+            } else if (!isChecked) {
+                viewModel.onsenData = 0
+            }
+            Log.d("onsen", viewModel.onsenData.toString())
+        }
+        viewModel.onsenData = 0
+
         binding.favoriteSearchButton.setOnClickListener {
 
             viewModel.selectedOrder(viewModel.allHotelData.value!!)
-
-
-            findNavController().navigate(R.id.favorite).apply { }
+            findNavController().navigate(R.id.favorite)
         }
 
     }
