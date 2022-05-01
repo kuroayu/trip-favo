@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="favoriteHotelViewModel"
+            name="viewModel"
             type="com.kuro.trip_favo.ui.viewModel.FavoriteHotelViewModel" />
 
     </data>
@@ -34,7 +34,7 @@
             android:textSize="18sp"
             android:padding="16dp" />
 
-        <SearchView
+        <EditText
             android:id="@+id/favorite_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,9 +44,10 @@
             android:layout_marginBottom="50dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:focusable="false"
-            android:queryHint="@string/keyword"
-            android:iconifiedByDefault="false" />
+            android:hint="@string/keyword"
+            android:iconifiedByDefault="false"
+            android:drawableStart="@drawable/ic_search"
+            android:text="@={viewModel.searchWord}" />
 
         <TextView
             android:id="@+id/favorite_onsen"
@@ -69,7 +70,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginBottom="30dp"
             android:switchMinWidth="60dp"
-            android:checked="false"
+            android:checked="@={viewModel.onsenData}"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <TextView
@@ -93,7 +94,7 @@
             app:layout_constraintBottom_toTopOf="@+id/favorite_search_button"
             android:layout_marginStart="3dp"
             android:layout_marginBottom="27dp"
-            android:selectedItemPosition="@={favoriteHotelViewModel.selectedOrderPosition}" />
+            android:selectedItemPosition="@={viewModel.selectedOrderPosition}" />
 
         <Button
             android:id="@+id/favorite_search_button"

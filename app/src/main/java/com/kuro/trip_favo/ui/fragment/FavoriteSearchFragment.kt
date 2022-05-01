@@ -1,7 +1,6 @@
 package com.kuro.trip_favo.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,8 +27,6 @@ class FavoriteSearchFragment : BottomSheetDialogFragment() {
         )
     }
 
-
-    //xmlがBottomSheetDialogFragmentのコンストラクタに入らないから使った
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,25 +42,16 @@ class FavoriteSearchFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.favoriteHotelViewModel = viewModel
+        binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.favoriteOrderSpinner.adapter = orderAdapter
 
-        binding.favoriteOnsenSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                viewModel.onsenData = 1
-            } else if (!isChecked) {
-                viewModel.onsenData = 0
-            }
-            Log.d("onsen", viewModel.onsenData.toString())
-        }
-        viewModel.onsenData = 0
-
         binding.favoriteSearchButton.setOnClickListener {
 
-            viewModel.selectedOrder(viewModel.allHotelData.value!!)
-            findNavController().navigate(R.id.favorite)
+            viewModel.selectedOrder()
+            findNavController().popBackStack()
+
         }
 
     }

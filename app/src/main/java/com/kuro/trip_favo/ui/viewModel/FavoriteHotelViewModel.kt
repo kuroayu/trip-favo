@@ -1,52 +1,57 @@
 package com.kuro.trip_favo.ui.viewModel
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.kuro.trip_favo.data.database.FavoriteHotel
 import com.kuro.trip_favo.data.repositry.FavoriteHotelRepository
-import com.kuro.trip_favo.ui.FavoriteListAdapter
+import kotlinx.coroutines.launch
 
 class FavoriteHotelViewModel(private val favoriteHotelRepository: FavoriteHotelRepository) :
     ViewModel() {
 
-    val allHotelData: LiveData<List<FavoriteHotel>> = favoriteHotelRepository.allHotelData
+    private val result = mutableSetOf<FavoriteHotel>()
+    private val _allHotelData: MutableLiveData<List<FavoriteHotel>> = MutableLiveData()
+    val allHotelData: LiveData<List<FavoriteHotel>> = _allHotelData
 
-    val favoriteAdapter = FavoriteListAdapter()
     val selectedOrderPosition = MutableLiveData(0)
 
-    var onsenData = 0
-    lateinit var favoriteOrderLists: List<FavoriteHotel>
+    val onsenData = MutableLiveData<Boolean>()
 
+    val searchWord = MutableLiveData<String>()
 
-    fun selectedOrder(favoriteHotel: List<FavoriteHotel>) {
+    fun init() {
+        viewModelScope.launch {
+            runCatching {
+                result.addAll(favoriteHotelRepository.getAllHotelData())
+                _allHotelData.value = result.toList()
+            }.onFailure {
 
-        if (onsenData == 0) {
-            when (selectedOrderPosition.value) {
-                0 -> favoriteOrderLists = favoriteHotel
-                1 -> favoriteOrderLists = favoriteHotel.sortedByDescending { it.reviewAverage }
-                2 -> favoriteOrderLists = favoriteHotel.sortedBy { it.hotelMinCharge }
-                3 -> favoriteOrderLists = favoriteHotel.sortedByDescending { it.date }
-                4 -> favoriteOrderLists = favoriteHotel.sortedBy { it.date }
-            }
-        } else if (onsenData == 1) {
-            val onsenFavoriteHotelLists = favoriteHotel.filter { it.onsen == 1 }
-            favoriteOrderLists = onsenFavoriteHotelLists
-
-            when (selectedOrderPosition.value) {
-                0 -> favoriteOrderLists = onsenFavoriteHotelLists
-                1 -> favoriteOrderLists =
-                    onsenFavoriteHotelLists.sortedByDescending { it.reviewAverage }
-                2 -> favoriteOrderLists = onsenFavoriteHotelLists.sortedBy { it.hotelMinCharge }
-                3 -> favoriteOrderLists = onsenFavoriteHotelLists.sortedByDescending { it.date }
-                4 -> favoriteOrderLists = onsenFavoriteHotelLists.sortedBy { it.date }
             }
         }
-        Log.d("favoriteOrderLists", favoriteOrderLists.toString())
     }
 
+
+    fun selectedOrder() {
+        //検索された言葉があればそれを返す、orEmptyで空なら自分自身を返す、この場合はitに当たるFavoriteHotelが返ってくる？
+        _allHotelData.value = result.filter {
+            it.hotelName.contains(searchWord.value.orEmpty()) ||
+                    it.address1.contains(searchWord.value.orEmpty()) ||
+                    it.address2.contains(searchWord.value.orEmpty())
+        }.run {
+            if (onsenData.value == true) {
+                filter { it.onsen == 1 }
+            } else this
+        }.run {
+            when (selectedOrderPosition.value) {
+                0 -> this
+                1 -> this.sortedByDescending { it.reviewAverage }
+                2 -> this.sortedBy { it.hotelMinCharge }
+                3 -> this.sortedByDescending { it.date }
+                4 -> this.sortedBy { it.date }
+
+                else -> this
+            }
+        }
+    }
 }
 
 

@@ -3,7 +3,6 @@ package com.kuro.trip_favo.ui.fragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +29,13 @@ class FavoriteFragment : Fragment() {
         )
     }
 
+    val favoriteAdapter = FavoriteListAdapter()
+
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.init()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,14 +44,13 @@ class FavoriteFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-
-        //DataBindingにする
+        
         val view = inflater.inflate(R.layout.fragment_favorite, container, false)
         val linearLayoutManager = LinearLayoutManager(requireContext())
         val recyclerView = view.findViewById<RecyclerView>(R.id.fovo_recyclerview)
 
 
-        recyclerView.adapter = viewModel.favoriteAdapter
+        recyclerView.adapter = favoriteAdapter
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -56,22 +61,13 @@ class FavoriteFragment : Fragment() {
 
 
         viewModel.allHotelData.observe(viewLifecycleOwner) { hotel ->
-            Log.d("allHotelData", viewModel.allHotelData.value!!.toString())
-            if (viewModel.selectedOrderPosition.value == 0 && viewModel.onsenData == 0) {
-                viewModel.favoriteAdapter.setHotel(hotel)
-                viewModel.favoriteAdapter.notifyDataSetChanged()
-            }
-//            else if (viewModel.selectedOrderPosition.value == 0 && viewModel.onsenData == 1) {
-//                viewModel.favoriteAdapter.setHotel(viewModel.favoriteOrderLists)
-//                viewModel.favoriteAdapter.notifyDataSetChanged()
-//            }
-            else {
-                viewModel.favoriteAdapter.setHotel(viewModel.favoriteOrderLists)
-                viewModel.favoriteAdapter.notifyDataSetChanged()
-            }
+
+            favoriteAdapter.setHotel(hotel)
+            favoriteAdapter.notifyDataSetChanged()
+
         }
 
-        viewModel.favoriteAdapter.setOnItemClickListener(object :
+        favoriteAdapter.setOnItemClickListener(object :
             FavoriteListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int, data: FavoriteHotel) {
                 val favoriteHotelUrl = Uri.parse(data.informationUrl)
