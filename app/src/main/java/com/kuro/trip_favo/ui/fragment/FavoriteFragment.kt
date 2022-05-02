@@ -29,6 +29,10 @@ class FavoriteFragment : Fragment() {
         )
     }
 
+//    private val touchHelper by lazy {
+//        getTouchHelper(adapter)
+//    }
+
     val favoriteAdapter = FavoriteListAdapter()
 
     override fun onResume() {
@@ -44,7 +48,7 @@ class FavoriteFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        
+
         val view = inflater.inflate(R.layout.fragment_favorite, container, false)
         val linearLayoutManager = LinearLayoutManager(requireContext())
         val recyclerView = view.findViewById<RecyclerView>(R.id.fovo_recyclerview)
@@ -59,6 +63,7 @@ class FavoriteFragment : Fragment() {
             )
         )
 
+//        touchHelper.attachToRecyclerView(favoriteAdapter)
 
         viewModel.allHotelData.observe(viewLifecycleOwner) { hotel ->
 
@@ -75,6 +80,12 @@ class FavoriteFragment : Fragment() {
 
                 startActivity(favoriteHotelIntent)
             }
+
+            override fun onItemLongClick(data: FavoriteHotel) {
+
+                viewModel.delete(data)
+
+            }
         })
 
 
@@ -84,6 +95,31 @@ class FavoriteFragment : Fragment() {
         }
         return view
     }
+
+//    private fun getTouchHelper(adapter: FavoriteListAdapter) {
+//
+//        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+//            ItemTouchHelper.ACTION_STATE_IDLE,
+//            ItemTouchHelper.RIGHT
+//        ) {
+//            override fun onMove(
+//                recyclerView: RecyclerView,
+//                viewHolder: RecyclerView.ViewHolder,
+//                target: RecyclerView.ViewHolder
+//            ): Boolean {
+//                return false
+//            }
+//
+//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                val position = viewHolder.bindingAdapterPosition
+//                viewModel.allHotelData.observe(viewLifecycleOwner) {
+//                    it.viewModel.delete(it)
+//                }
+//                adapter.notifyItemRemoved(viewHolder.layoutPosition)
+//            }
+//        })
+//
+//    }
 
 
 }

@@ -6,6 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
+    <!--    <data>-->
+
+    <!--        <variable-->
+    <!--            name="viewModel"-->
+    <!--            type="com.kuro.trip_favo.ui.viewModel.FavoriteHotelViewModel" />-->
+
+    <!--    </data>-->
+
 
     <ImageView
         android:id="@+id/search_image"

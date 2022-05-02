@@ -65,6 +65,9 @@ class SearchResultFragment : Fragment() {
                 val favoriteButton = view.findViewById<ImageView>(R.id.favorite_button)
 
 
+                //binding？
+                //mutableLiveDataにしておく？
+
 
                 when (view) {
                     favoriteButton -> {
@@ -75,7 +78,6 @@ class SearchResultFragment : Fragment() {
                             favoriteButton.apply {
                                 setBackgroundResource(R.drawable.change_active_favorite_button)
                                 (background as AnimationDrawable).start()
-
                             }
                         } else if (favoriteButton.isSelected) {
                             favoriteButton.isSelected = false

@@ -19,8 +19,14 @@ class FavoriteHotelViewModel(private val favoriteHotelRepository: FavoriteHotelR
     val searchWord = MutableLiveData<String>()
 
     fun init() {
+        refresh()
+    }
+
+    //runCatchingするタイミングがわからない　例外を予測して書くなら割と書き忘れそう
+    private fun refresh() {
         viewModelScope.launch {
             runCatching {
+                result.clear()
                 result.addAll(favoriteHotelRepository.getAllHotelData())
                 _allHotelData.value = result.toList()
             }.onFailure {
@@ -31,7 +37,6 @@ class FavoriteHotelViewModel(private val favoriteHotelRepository: FavoriteHotelR
 
 
     fun selectedOrder() {
-        //検索された言葉があればそれを返す、orEmptyで空なら自分自身を返す、この場合はitに当たるFavoriteHotelが返ってくる？
         _allHotelData.value = result.filter {
             it.hotelName.contains(searchWord.value.orEmpty()) ||
                     it.address1.contains(searchWord.value.orEmpty()) ||
@@ -50,6 +55,14 @@ class FavoriteHotelViewModel(private val favoriteHotelRepository: FavoriteHotelR
 
                 else -> this
             }
+        }
+    }
+
+    fun delete(data: FavoriteHotel) {
+        viewModelScope.launch {
+            val favoriteHotel = data
+            favoriteHotelRepository.delete(favoriteHotel)
+            refresh()
         }
     }
 }

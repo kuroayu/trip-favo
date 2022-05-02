@@ -1,9 +1,6 @@
 package com.kuro.trip_favo.data.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface FavoriteHotelDao {
@@ -15,4 +12,7 @@ interface FavoriteHotelDao {
 
     @Query("SELECT * FROM hotel_table WHERE (hotelName + address1 + address2) LIKE (:word)")
     fun searchData(word: String): List<FavoriteHotel>
+
+    @Delete
+    suspend fun delete(hotelData: FavoriteHotel)
 }

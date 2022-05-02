@@ -49,7 +49,7 @@ class SearchResultViewModel(
                         true -> 0
                         false -> 1
                     }
-                    Log.d("hotelOnsen", onsen.toString())
+                    Log.d("onsen", onsen.toString())
                 } else {
                     _isError.value = true
                 }

@@ -13,4 +13,8 @@ class FavoriteHotelRepository(private val favoriteHotelDao: FavoriteHotelDao) {
     suspend fun insert(favoriteHotel: FavoriteHotel) {
         favoriteHotelDao.insert(favoriteHotel)
     }
+
+    suspend fun delete(favoriteHotel: FavoriteHotel) {
+        favoriteHotelDao.delete(favoriteHotel)
+    }
 }
