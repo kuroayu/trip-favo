@@ -29,10 +29,6 @@ class FavoriteFragment : Fragment() {
         )
     }
 
-//    private val touchHelper by lazy {
-//        getTouchHelper(adapter)
-//    }
-
     val favoriteAdapter = FavoriteListAdapter()
 
     override fun onResume() {
@@ -62,8 +58,6 @@ class FavoriteFragment : Fragment() {
                 LinearLayoutManager.VERTICAL
             )
         )
-
-//        touchHelper.attachToRecyclerView(favoriteAdapter)
 
         viewModel.allHotelData.observe(viewLifecycleOwner) { hotel ->
 
@@ -95,32 +89,5 @@ class FavoriteFragment : Fragment() {
         }
         return view
     }
-
-//    private fun getTouchHelper(adapter: FavoriteListAdapter) {
-//
-//        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-//            ItemTouchHelper.ACTION_STATE_IDLE,
-//            ItemTouchHelper.RIGHT
-//        ) {
-//            override fun onMove(
-//                recyclerView: RecyclerView,
-//                viewHolder: RecyclerView.ViewHolder,
-//                target: RecyclerView.ViewHolder
-//            ): Boolean {
-//                return false
-//            }
-//
-//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                val position = viewHolder.bindingAdapterPosition
-//                viewModel.allHotelData.observe(viewLifecycleOwner) {
-//                    it.viewModel.delete(it)
-//                }
-//                adapter.notifyItemRemoved(viewHolder.layoutPosition)
-//            }
-//        })
-//
-//    }
-
-
 }
 

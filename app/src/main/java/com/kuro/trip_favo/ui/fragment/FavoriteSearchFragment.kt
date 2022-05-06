@@ -26,7 +26,7 @@ class FavoriteSearchFragment : BottomSheetDialogFragment() {
             resources.getStringArray(R.array.order)
         )
     }
-
+    
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
