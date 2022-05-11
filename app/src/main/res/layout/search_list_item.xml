@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.kuro.trip_favo.ui.viewModel.SearchResultViewModel" />
+            name="item"
+            type="com.kuro.trip_favo.ui.viewModel.SearchResultViewModel.RenderListItem" />
 
     </data>
 
@@ -50,6 +50,7 @@
                 android:ellipsize="end"
                 android:textColor="@color/black"
                 android:textSize="14sp"
+                android:text="@{item.hotelBasicInfo.hotelName}"
                 tools:text="アルパカ宿" />
 
             <ImageView
@@ -73,6 +74,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:isIndicator="true"
+                android:rating="@{item.rating}"
                 android:theme="@style/RatingBar" />
 
             <TextView
@@ -85,6 +87,7 @@
                 android:layout_marginStart="16dp"
                 android:textColor="@color/black"
                 android:textSize="12sp"
+                android:text="@{item.price}"
                 tools:text="15,000円(税込)〜" />
 
             <TextView
@@ -98,6 +101,7 @@
                 android:layout_marginBottom="16dp"
                 android:textColor="@color/black"
                 android:textSize="12sp"
+                android:text="@{item.address}"
                 tools:text="長崎県長崎市4-5-6" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

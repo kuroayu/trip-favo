@@ -11,7 +11,6 @@
         <action
             android:id="@+id/action_favorite_to_favoriteSearchFragment"
             app:destination="@id/favoriteSearchFragment" />
-
     </custom_fragment>
 
     <custom_fragment
@@ -55,7 +54,5 @@
             android:id="@+id/action_favoriteSearchFragment_to_favorite"
             app:destination="@id/favorite" />
 
-
     </dialog>
-
 </navigation>

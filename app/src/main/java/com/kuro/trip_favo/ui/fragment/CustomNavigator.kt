@@ -13,7 +13,6 @@ import androidx.navigation.fragment.NavHostFragment
 //NavigationライブラリのFragmentNavigatorクラスのnavigate()でFragmentは再生成されている
 //だけど状態を保存したいからnavigate()を上書きして再生成しないようにしている
 //FragmentNavigator: Fragmentのナビゲーター
-// 宛先は android:name か Destination.setClassNameで設定する必要がある
 //valueはnaviGraphのfragment名
 @Navigator.Name("custom_fragment")
 class CustomNavigator(
@@ -25,14 +24,14 @@ class CustomNavigator(
     //destination: 移動先の宛先?
     //args: ナビゲーションに使用する引数?
     //navOptions: ナビゲーション用の追加オプション
-    //navigatorExtras: ナビゲーターに固有のエクストラ?
+    //navigatorExtras: ナビゲーターに固有のエクストラ
     override fun navigate(
         destination: Destination,
         args: Bundle?,
         navOptions: NavOptions?,
         navigatorExtras: Navigator.Extras?
     ): NavDestination? {
-        //isStateSaved: 状態が保存されている時はtrueを返し状態を変更する操作をしない
+        //isStateSaved: 状態が保存されている時はtrueを返し状態を変更する操作をしない　意味不明けど問題フラグ
         //return null?
         if (manager.isStateSaved) {
             return null

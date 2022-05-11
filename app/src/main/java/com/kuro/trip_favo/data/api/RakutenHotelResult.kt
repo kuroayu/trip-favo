@@ -1,3 +1,5 @@
+package com.kuro.trip_favo.data.api
+
 import com.kuro.trip_favo.data.database.FavoriteHotel
 import kotlinx.serialization.Serializable
 

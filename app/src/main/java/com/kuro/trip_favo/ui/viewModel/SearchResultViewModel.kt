@@ -1,7 +1,10 @@
 package com.kuro.trip_favo.ui.viewModel
 
-import HotelBasicInfo
+
+import android.util.Log
 import androidx.lifecycle.*
+import com.kuro.trip_favo.data.api.HotelBasicInfo
+import com.kuro.trip_favo.data.database.FavoriteHotel
 import com.kuro.trip_favo.data.repositry.FavoriteHotelRepository
 import com.kuro.trip_favo.data.repositry.HotelRepository
 import kotlinx.coroutines.launch
@@ -12,6 +15,7 @@ class SearchResultViewModel(
 ) :
     ViewModel() {
 
+
     private val _hotelResult: MutableLiveData<List<RenderListItem>> = MutableLiveData()
 
     val hotelList: LiveData<List<RenderListItem>> = _hotelResult
@@ -21,6 +25,9 @@ class SearchResultViewModel(
     private val _isError: MutableLiveData<Boolean> = MutableLiveData(false)
     val isError: LiveData<Boolean> = _isError
 
+
+//    val allHotelData = viewModelScope.launch { favoriteHotelRepository.getAllHotelData() }
+//    val allHotelData: LiveData<List<FavoriteHotel>> = MutableLiveData()
 
     fun init(
         middleClassCode: String,
@@ -56,49 +63,37 @@ class SearchResultViewModel(
         }
     }
 
-
-    //リストバラせない
-    //ホテルナンバーが一致しているものは取れたけど、こんなことしなくても出来そうな
-    //ImageViewをdatabindingして、データベースに保存されているものは塗りつぶし、新規はぬりつぶしなしアイコン
-//    fun checkedSameData(basicInfo: List<HotelBasicInfo>) {
-//        viewModelScope.launch {
-//
-//
-//            val hotelData =
-//                favoriteHotelRepository.getAllHotelData().map { it.hotelNumber }
-//            Log.d(
-//                    "hotelData",
-//                    hotelData.toString()
-//                )
-//
-//
-//            val searchData = basicInfo.map { it.hotelNo }
-//            Log.d("searchData", searchData.toString())
-//
-//
-//            searchData.forEach {
-//                val list = it
-//                val sameData = hotelData.filter { it == list }
-//                Log.d("sameData", sameData.toString())
-//            }
-//        }
-//    }
-
-
     fun insert(data: HotelBasicInfo) {
         viewModelScope.launch {
 
             val date = System.currentTimeMillis()
             val favoriteHotel = data.toFavoriteHotel(date, onsen)
+            Log.d("favoriteHotel", favoriteHotel.toString())
 
             favoriteHotelRepository.insert(favoriteHotel)
+        }
+    }
+
+    //    追記
+    fun delete(data: FavoriteHotel) {
+        viewModelScope.launch {
+            favoriteHotelRepository.delete(data)
         }
     }
 
     data class RenderListItem(
         val hotelBasicInfo: HotelBasicInfo,
         val isRegistered: Boolean
-    )
+    ) {
+        val price: String
+            get() = "${hotelBasicInfo.hotelMinCharge}円"
+
+        val address: String
+            get() = "${hotelBasicInfo.address1}${hotelBasicInfo.address2}"
+
+        val rating: Float
+            get() = hotelBasicInfo.reviewAverage.toFloat()
+    }
 }
 
 

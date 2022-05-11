@@ -1,7 +1,6 @@
 package com.kuro.trip_favo.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
@@ -61,20 +60,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             middleAreaAdapter.clear()
             middleAreaAdapter.addAll(it)
             middleAreaAdapter.notifyDataSetChanged()
-            Log.d("smallName", it.toString())
         }
         viewModel.smallAreaNameList.observe(viewLifecycleOwner) {
             smallAreaAdapter.clear()
             smallAreaAdapter.addAll(it)
             smallAreaAdapter.notifyDataSetChanged()
-            Log.d("smallName", it.toString())
         }
 
         viewModel.detailAreaNameList.observe(viewLifecycleOwner) {
             detailAreaAdapter.clear()
             detailAreaAdapter.addAll(it)
             detailAreaAdapter.notifyDataSetChanged()
-            Log.d("detailName", it.toString())
         }
 
         binding.ratingbar.setOnRatingBarChangeListener { _, rating, _ ->
@@ -83,11 +79,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         binding.searchOnsenSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                Log.d("selectedSwitch", "onsen")
                 squeezeCondition = "onsen"
 
             } else if (!isChecked) {
-                Log.d("selectedSwitch", "null")
                 squeezeCondition = ""
 
             }
