@@ -1,7 +1,6 @@
 package com.kuro.trip_favo.ui
 
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ class SearchAdapter(private val lifecycleOwner: LifecycleOwner) :
     ListAdapter<SearchResultViewModel.RenderListItem, SearchViewHolder>(SearchResultDiffItemCallback()) {
 
     private lateinit var listener: OnItemClickListener
-//    lateinit var buttonListener: OnButtonClickListener
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
@@ -37,17 +35,12 @@ class SearchAdapter(private val lifecycleOwner: LifecycleOwner) :
 
         holder.binding.favoriteButton.setOnClickListener {
             listener.onFavoriteButtonClick(it, hotelData)
-            Log.d("favoriteButton", "favoriteButton")
         }
         holder.itemView.setOnClickListener {
             listener.onItemClick(it, position, hotelData.hotelBasicInfo)
         }
         holder.binding.executePendingBindings()
 
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            holder.binding.item = hotelData.copy(isRegistered = true)
-//            holder.binding.executePendingBindings()
-//        }, 2000)
     }
 
     interface OnItemClickListener {
@@ -61,7 +54,6 @@ class SearchAdapter(private val lifecycleOwner: LifecycleOwner) :
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
-
 }
 
 class SearchViewHolder(val binding: SearchListItemBinding) : RecyclerView.ViewHolder(binding.root)

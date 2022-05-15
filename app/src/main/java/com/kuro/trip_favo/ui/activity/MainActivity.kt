@@ -18,11 +18,9 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val toolbar = findViewById<Toolbar>(R.id.top_toolbar)
 
-        //setupWithNavController: findNavControllerのラッパー
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.favorite, R.id.search))
         setupWithNavController(bottomNavigation, navController)
-        setupWithNavController(toolbar, navController,appBarConfiguration)
-
+        setupWithNavController(toolbar, navController, appBarConfiguration)
 
 
     }

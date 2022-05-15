@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -86,7 +85,6 @@ class SearchResultFragment : Fragment(R.layout.fragment_search_result) {
         })
 
         viewModel.hotelList.observe(viewLifecycleOwner) {
-            Log.d("hotelList", it.toString())
             val ratingSearchHotelInfo =
                 it.filter { it.hotelBasicInfo.reviewAverage >= args.selectedRating.toDouble() }
             searchAdapter.submitList(ratingSearchHotelInfo)

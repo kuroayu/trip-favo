@@ -23,10 +23,6 @@ class SearchResultViewModel(
     private val _isError: MutableLiveData<Boolean> = MutableLiveData(false)
     val isError: LiveData<Boolean> = _isError
 
-
-//    val allHotelData = viewModelScope.launch { favoriteHotelRepository.getAllHotelData() }
-//    val allHotelData: LiveData<List<FavoriteHotel>> = MutableLiveData()
-
     fun init(
         middleClassCode: String,
         smallClassCode: String,

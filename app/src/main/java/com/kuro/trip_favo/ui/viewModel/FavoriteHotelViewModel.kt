@@ -21,8 +21,7 @@ class FavoriteHotelViewModel(private val favoriteHotelRepository: FavoriteHotelR
     fun init() {
         refresh()
     }
-
-    //runCatchingするタイミングがわからない　例外を予測して書くなら割と書き忘れそう
+    
     private fun refresh() {
         viewModelScope.launch {
             runCatching {
