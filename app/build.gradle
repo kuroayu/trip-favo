@@ -58,6 +58,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     kapt "androidx.room:room-compiler:2.4.2"
     androidTestImplementation "androidx.room:room-testing:2.4.2"
+    // Kotlin components
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
     //BottomSheet
     implementation 'com.google.android.material:material:1.5.0'
     //KotlinSerialization
@@ -70,7 +74,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.2.1"
     //Coil
     implementation "io.coil-kt:coil-compose:1.4.0"
-
+    //lifecycle
     def lifecycle_version = "2.4.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.kuro.trip_favo.R
 
-class SearchAdapter() :
+class SearchAdapter :
     RecyclerView.Adapter<SearchViewHolder>() {
 
     private var hotelBasicInfo: List<HotelBasicInfo> = emptyList()
@@ -36,6 +36,9 @@ class SearchAdapter() :
         holder.itemView.setOnClickListener {
             //interfaceとかを使わずにここにクリックイベント処理かけないのはなんで
             //あ、書けないわけではなくてdataBindするとこに書くことでもないってことか？
+            listener.onItemClick(it, position, hotelData)
+        }
+        holder.favoriteButton.setOnClickListener {
             listener.onItemClick(it, position, hotelData)
         }
     }
@@ -65,9 +68,11 @@ class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val price: TextView = itemView.findViewById(R.id.search_price)
     val address: TextView = itemView.findViewById(R.id.search_address)
     val ratingBar: RatingBar = itemView.findViewById(R.id.search_ratingbar)
+    val favoriteButton: ImageView = itemView.findViewById(R.id.favorite_button)
 
     //var出ないとbind出来ない
     var image: ImageView = itemView.findViewById(R.id.search_image)
+
 }
 
 
