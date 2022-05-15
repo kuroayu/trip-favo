@@ -8,7 +8,6 @@ class FavoriteApplication : Application() {
 
     private val database by lazy { FavoriteHotelDatabase.getDatabase(this) }
 
-    //favoriteHotelRepositoryのコンストラクタでrepositoryとdaoを紐づけているのにここでもまた？
     val favoriteHotelRepository by lazy { FavoriteHotelRepository(database.favoriteHotelDao()) }
 
     val hotelRepository by lazy { HotelRepository() }

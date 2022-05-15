@@ -1,16 +1,69 @@
 package com.kuro.trip_favo.ui.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.kuro.trip_favo.data.database.FavoriteHotel
 import com.kuro.trip_favo.data.repositry.FavoriteHotelRepository
+import kotlinx.coroutines.launch
 
 class FavoriteHotelViewModel(private val favoriteHotelRepository: FavoriteHotelRepository) :
     ViewModel() {
 
-    val allHotelData: LiveData<List<FavoriteHotel>> = favoriteHotelRepository.allHotelData
+    private val result = mutableSetOf<FavoriteHotel>()
+    private val _allHotelData: MutableLiveData<List<FavoriteHotel>> = MutableLiveData()
+    val allHotelData: LiveData<List<FavoriteHotel>> = _allHotelData
 
+    val selectedOrderPosition = MutableLiveData(0)
+
+    val onsenData = MutableLiveData<Boolean>()
+
+    val searchWord = MutableLiveData<String>()
+
+    fun init() {
+        refresh()
+    }
+    
+    private fun refresh() {
+        viewModelScope.launch {
+            runCatching {
+                result.clear()
+                result.addAll(favoriteHotelRepository.getAllHotelData())
+                _allHotelData.value = result.toList()
+            }.onFailure {
+
+            }
+        }
+    }
+
+
+    fun selectedOrder() {
+        _allHotelData.value = result.filter {
+            it.hotelName.contains(searchWord.value.orEmpty()) ||
+                    it.address1.contains(searchWord.value.orEmpty()) ||
+                    it.address2.contains(searchWord.value.orEmpty())
+        }.run {
+            if (onsenData.value == true) {
+                filter { it.onsen == 1 }
+            } else this
+        }.run {
+            when (selectedOrderPosition.value) {
+                0 -> this
+                1 -> this.sortedByDescending { it.reviewAverage }
+                2 -> this.sortedBy { it.hotelMinCharge }
+                3 -> this.sortedByDescending { it.date }
+                4 -> this.sortedBy { it.date }
+
+                else -> this
+            }
+        }
+    }
+
+    fun delete(data: FavoriteHotel) {
+        viewModelScope.launch {
+            val favoriteHotel = data
+            favoriteHotelRepository.delete(favoriteHotel)
+            refresh()
+        }
+    }
 }
 
 
@@ -26,3 +79,4 @@ class FavoriteHotelViewModelFactory(
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+

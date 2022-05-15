@@ -9,22 +9,19 @@
         android:name="com.kuro.trip_favo.ui.fragment.FavoriteFragment"
         android:label="@string/favo_fragment">
         <action
-            android:id="@+id/action_favo_to_favoriteSearchFragment"
+            android:id="@+id/action_favorite_to_favoriteSearchFragment"
             app:destination="@id/favoriteSearchFragment" />
-
     </custom_fragment>
 
     <custom_fragment
         android:id="@+id/search"
         android:name="com.kuro.trip_favo.ui.fragment.SearchFragment"
         android:label="@string/search_fragment">
-        <!--        追加変更-->
         <action
             android:id="@+id/action_search_to_searchResultFragment"
             app:destination="@id/searchResultFragment" />
     </custom_fragment>
 
-    <!--    追加変更-->
     <custom_fragment
         android:id="@+id/searchResultFragment"
         android:name="com.kuro.trip_favo.ui.fragment.SearchResultFragment"
@@ -49,6 +46,11 @@
     <dialog
         android:id="@+id/favoriteSearchFragment"
         android:name="com.kuro.trip_favo.ui.fragment.FavoriteSearchFragment"
-        android:label="FavoriteSearchFragment" />
+        android:label="FavoriteSearchFragment">
 
+        <action
+            android:id="@+id/action_favoriteSearchFragment_to_favorite"
+            app:destination="@id/favorite" />
+
+    </dialog>
 </navigation>

@@ -36,10 +36,15 @@ class FavoriteListAdapter() :
         holder.itemView.setOnClickListener {
             listener.onItemClick(it, position, favoriteHotelList)
         }
+        holder.itemView.setOnLongClickListener {
+            listener.onItemLongClick(favoriteHotelList)
+            true
+        }
     }
 
     interface OnItemClickListener {
         fun onItemClick(view: View, position: Int, data: FavoriteHotel)
+        fun onItemLongClick(data: FavoriteHotel)
     }
 
     fun setOnItemClickListener(listener: FavoriteListAdapter.OnItemClickListener) {

@@ -4,14 +4,14 @@
     android:oneshot="true">
 
 
-<!--<selector xmlns:android="http://schemas.android.com/apk/res/android">-->
+    <item
+        android:drawable="@drawable/ic_baseline_favorite_border_24"
+        android:duration="200" />
 
-    <item android:drawable="@drawable/ic_baseline_favorite_border_24" android:duration="200"  />
-
-    <item android:drawable="@drawable/ic_baseline_favorite_24" android:duration="200"  />
-
-<!--</selector>-->
+    <item
+        android:drawable="@drawable/ic_baseline_favorite_24"
+        android:duration="200" />
 
 
-    </animation-list>
+</animation-list>
 

@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,16 +22,20 @@ import com.kuro.trip_favo.ui.viewModel.FavoriteHotelViewModelFactory
 
 class FavoriteFragment : Fragment() {
 
-
-    private val viewModel: FavoriteHotelViewModel by viewModels {
+    private val viewModel: FavoriteHotelViewModel by activityViewModels {
         val application = requireActivity().application as FavoriteApplication
         FavoriteHotelViewModelFactory(
             application.favoriteHotelRepository
         )
     }
 
-    private val favoriteAdapter = FavoriteListAdapter()
+    val favoriteAdapter = FavoriteListAdapter()
 
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.init()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +44,7 @@ class FavoriteFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        //DataBindingにする
+
         val view = inflater.inflate(R.layout.fragment_favorite, container, false)
         val linearLayoutManager = LinearLayoutManager(requireContext())
         val recyclerView = view.findViewById<RecyclerView>(R.id.fovo_recyclerview)
@@ -56,25 +60,34 @@ class FavoriteFragment : Fragment() {
         )
 
         viewModel.allHotelData.observe(viewLifecycleOwner) { hotel ->
+
             favoriteAdapter.setHotel(hotel)
             favoriteAdapter.notifyDataSetChanged()
+
         }
 
-        favoriteAdapter.setOnItemClickListener(object : FavoriteListAdapter.OnItemClickListener {
+        favoriteAdapter.setOnItemClickListener(object :
+            FavoriteListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int, data: FavoriteHotel) {
                 val favoriteHotelUrl = Uri.parse(data.informationUrl)
                 val favoriteHotelIntent = Intent(Intent.ACTION_VIEW, favoriteHotelUrl)
 
                 startActivity(favoriteHotelIntent)
             }
+
+            override fun onItemLongClick(data: FavoriteHotel) {
+
+                viewModel.delete(data)
+
+            }
         })
 
 
         val fab = view.findViewById<FloatingActionButton>(R.id.fab_favo)
         fab.setOnClickListener {
-            findNavController().navigate(R.id.action_favo_to_favoriteSearchFragment)
+            findNavController().navigate(R.id.action_favorite_to_favoriteSearchFragment)
         }
         return view
     }
-
 }
+

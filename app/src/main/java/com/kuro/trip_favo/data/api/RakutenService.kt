@@ -1,6 +1,6 @@
 package com.kuro.trip_favo.data.api
 
-import RakutenHotelResult
+
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

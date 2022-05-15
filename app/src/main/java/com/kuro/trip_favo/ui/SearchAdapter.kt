@@ -1,79 +1,75 @@
 package com.kuro.trip_favo.ui
 
-import HotelBasicInfo
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
+import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.kuro.trip_favo.R
+import com.kuro.trip_favo.data.api.HotelBasicInfo
+import com.kuro.trip_favo.databinding.SearchListItemBinding
+import com.kuro.trip_favo.ui.viewModel.SearchResultViewModel
 
-class SearchAdapter :
-    RecyclerView.Adapter<SearchViewHolder>() {
+class SearchAdapter(private val lifecycleOwner: LifecycleOwner) :
+    ListAdapter<SearchResultViewModel.RenderListItem, SearchViewHolder>(SearchResultDiffItemCallback()) {
 
-    private var hotelBasicInfo: List<HotelBasicInfo> = emptyList()
-    lateinit var listener: OnItemClickListener
+    private lateinit var listener: OnItemClickListener
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
-        val itemView = inflater.inflate(R.layout.search_list_item, parent, false)
-        return SearchViewHolder(itemView)
+        val binding = SearchListItemBinding.inflate(inflater, parent, false)
+        return SearchViewHolder(binding)
     }
 
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        val hotelData = hotelBasicInfo[position]
-        holder.hotelName.text = hotelData.hotelName
-        holder.price.text = hotelData.hotelMinCharge.toString() + "円〜"
-        holder.address.text = hotelData.address1 + hotelData.address2
-        holder.image.load(hotelData.hotelImageUrl)
-        holder.ratingBar.rating = hotelData.reviewAverage.toFloat()
+        val hotelData = getItem(position)
+        holder.binding.lifecycleOwner = lifecycleOwner
+        holder.binding.item = hotelData
+        holder.binding.searchImage.load(hotelData.hotelBasicInfo.hotelImageUrl)
+
+        holder.binding.favoriteButton.setOnClickListener {
+            listener.onFavoriteButtonClick(it, hotelData)
+        }
         holder.itemView.setOnClickListener {
-            //interfaceとかを使わずにここにクリックイベント処理かけないのはなんで
-            //あ、書けないわけではなくてdataBindするとこに書くことでもないってことか？
-            listener.onItemClick(it, position, hotelData)
+            listener.onItemClick(it, position, hotelData.hotelBasicInfo)
         }
-        holder.favoriteButton.setOnClickListener {
-            listener.onItemClick(it, position, hotelData)
-        }
+        holder.binding.executePendingBindings()
+
     }
 
-    //Adapterのinterfaceをoverride的なのかと思いきや自作っぽい
     interface OnItemClickListener {
         fun onItemClick(view: View, position: Int, data: HotelBasicInfo)
+        fun onFavoriteButtonClick(
+            favoriteButton: View,
+            renderListItem: SearchResultViewModel.RenderListItem
+        )
     }
 
-    //これfragmentに書くじゃダメなの
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
-
-
-    override fun getItemCount(): Int {
-        return hotelBasicInfo.size
-    }
-
-    fun setHotelInfo(hotelBasicInfo: List<HotelBasicInfo>) {
-        this.hotelBasicInfo = hotelBasicInfo
-    }
 }
 
-class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val hotelName: TextView = itemView.findViewById(R.id.search_hotel_name)
-    val price: TextView = itemView.findViewById(R.id.search_price)
-    val address: TextView = itemView.findViewById(R.id.search_address)
-    val ratingBar: RatingBar = itemView.findViewById(R.id.search_ratingbar)
-    val favoriteButton: ImageView = itemView.findViewById(R.id.favorite_button)
+class SearchViewHolder(val binding: SearchListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
-    //var出ないとbind出来ない
-    var image: ImageView = itemView.findViewById(R.id.search_image)
+class SearchResultDiffItemCallback : DiffUtil.ItemCallback<SearchResultViewModel.RenderListItem>() {
+    override fun areItemsTheSame(
+        oldItem: SearchResultViewModel.RenderListItem,
+        newItem: SearchResultViewModel.RenderListItem
+    ): Boolean = oldItem == newItem
+
+    override fun areContentsTheSame(
+        oldItem: SearchResultViewModel.RenderListItem,
+        newItem: SearchResultViewModel.RenderListItem
+    ): Boolean = oldItem.hotelBasicInfo.hotelNo == newItem.hotelBasicInfo.hotelNo
+            && oldItem.isRegistered == newItem.isRegistered
 
 }
-
 
 

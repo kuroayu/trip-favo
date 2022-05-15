@@ -8,7 +8,6 @@ data class FavoriteHotel(
     @PrimaryKey
     val hotelNumber: Int,
     val date: Long,
-    //温泉で絞り込んだものに数字を割り振る予定(0=温泉なし、1=温泉あり)
     val onsen: Int,
     val hotelName: String,
     val imageUrl: String,

@@ -4,43 +4,56 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kuro.trip_favo.R
+import com.kuro.trip_favo.databinding.FragmentFavoriteSearchBinding
+import com.kuro.trip_favo.ui.viewModel.FavoriteHotelViewModel
 
 
 class FavoriteSearchFragment : BottomSheetDialogFragment() {
+
+    lateinit var binding: FragmentFavoriteSearchBinding
+    private val viewModel: FavoriteHotelViewModel by activityViewModels()
+
+
+    private val orderAdapter by lazy {
+        ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            resources.getStringArray(R.array.order)
+        )
+    }
+    
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        
-        val view = inflater.inflate(R.layout.favorite_search_fragment, container, false)
+    ): View {
 
-        val favoriteSpinner = view.findViewById<Spinner>(R.id.favorite_order_spinner)
-        val item = resources.getStringArray(R.array.order)
-        val currentOrder = view.findViewById<TextView>(R.id.current_order)
-
-        val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, item)
-        favoriteSpinner.adapter = adapter
-        favoriteSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val order = parent.getItemAtPosition(position)
-                currentOrder.text = order.toString()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
-        return view
+        binding = FragmentFavoriteSearchBinding.inflate(inflater, container, false)
+        return binding.root
     }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        binding.favoriteOrderSpinner.adapter = orderAdapter
+
+        binding.favoriteSearchButton.setOnClickListener {
+
+            viewModel.selectedOrder()
+            findNavController().popBackStack()
+
+        }
+
+    }
+
 }

@@ -1,7 +1,8 @@
 package com.kuro.trip_favo.data.repositry
 
-import RakutenHotelResult
+
 import com.kuro.trip_favo.data.api.ApiClient
+import com.kuro.trip_favo.data.api.RakutenHotelResult
 import retrofit2.Response
 
 class HotelRepository {
