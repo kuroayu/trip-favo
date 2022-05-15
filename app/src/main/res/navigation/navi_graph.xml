@@ -17,13 +17,11 @@
         android:id="@+id/search"
         android:name="com.kuro.trip_favo.ui.fragment.SearchFragment"
         android:label="@string/search_fragment">
-        <!--        追加変更-->
         <action
             android:id="@+id/action_search_to_searchResultFragment"
             app:destination="@id/searchResultFragment" />
     </custom_fragment>
 
-    <!--    追加変更-->
     <custom_fragment
         android:id="@+id/searchResultFragment"
         android:name="com.kuro.trip_favo.ui.fragment.SearchResultFragment"
