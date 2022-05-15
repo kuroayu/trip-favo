@@ -5,21 +5,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
+import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.kuro.trip_favo.R
 import com.kuro.trip_favo.data.api.HotelBasicInfo
 import com.kuro.trip_favo.databinding.SearchListItemBinding
 import com.kuro.trip_favo.ui.viewModel.SearchResultViewModel
 
-class SearchAdapter :
-    RecyclerView.Adapter<SearchViewHolder>() {
+class SearchAdapter(private val lifecycleOwner: LifecycleOwner) :
+    ListAdapter<SearchResultViewModel.RenderListItem, SearchViewHolder>(SearchResultDiffItemCallback()) {
 
-    private var hotelBasicInfo: List<SearchResultViewModel.RenderListItem> = emptyList()
-    lateinit var listener: OnItemClickListener
+    private lateinit var listener: OnItemClickListener
 //    lateinit var buttonListener: OnButtonClickListener
 
 
@@ -32,77 +30,54 @@ class SearchAdapter :
 
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        val hotelData = hotelBasicInfo[position]
+        val hotelData = getItem(position)
+        holder.binding.lifecycleOwner = lifecycleOwner
         holder.binding.item = hotelData
-        holder.image.load(hotelData.hotelBasicInfo.hotelImageUrl)
+        holder.binding.searchImage.load(hotelData.hotelBasicInfo.hotelImageUrl)
 
-        holder.favoriteButton.setOnClickListener {
-            listener.onFavoriteButtonClick(it, hotelData.hotelBasicInfo)
+        holder.binding.favoriteButton.setOnClickListener {
+            listener.onFavoriteButtonClick(it, hotelData)
             Log.d("favoriteButton", "favoriteButton")
-        }
-        if (hotelData.isRegistered) {
-            holder.favoriteButton.setImageResource(R.drawable.ic_baseline_favorite_24)
         }
         holder.itemView.setOnClickListener {
             listener.onItemClick(it, position, hotelData.hotelBasicInfo)
         }
+        holder.binding.executePendingBindings()
+
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            holder.binding.item = hotelData.copy(isRegistered = true)
+//            holder.binding.executePendingBindings()
+//        }, 2000)
     }
-
-
-//        if (hotelData.isRegistered) {
-//            holder.favoriteButton.setImageResource(R.drawable.ic_baseline_favorite_24)
-//            holder.favoriteButton.setOnClickListener {
-//                listener.onItemDeleteClick(hotelData.hotelBasicInfo)
-//            }
-//        } else if (!hotelData.isRegistered) {
-//            holder.favoriteButton.setOnClickListener {
-//                listener.onItemInsertClick(hotelData.hotelBasicInfo)
-//            }
-//        }
-
 
     interface OnItemClickListener {
         fun onItemClick(view: View, position: Int, data: HotelBasicInfo)
-        fun onFavoriteButtonClick(favoriteButton: View, data: HotelBasicInfo)
+        fun onFavoriteButtonClick(
+            favoriteButton: View,
+            renderListItem: SearchResultViewModel.RenderListItem
+        )
     }
-
-//        //        //追記
-//        fun onItemDeleteClick(data: HotelBasicInfo)
-//        fun onItemInsertClick(data: HotelBasicInfo)
-
-
-//    interface OnButtonClickListener {
-//        fun onItemDeleteClick(data: HotelBasicInfo)
-//        fun onItemInsertClick(data: HotelBasicInfo)
-//    }
-
-//    fun setOnButtonClickListener(listener: OnButtonClickListener){
-//        .buttonListener = listener
-//    }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
 
-    override fun getItemCount(): Int {
-        return hotelBasicInfo.size
-    }
-
-    fun setHotelInfo(hotelBasicInfo: List<SearchResultViewModel.RenderListItem>) {
-        this.hotelBasicInfo = hotelBasicInfo
-    }
 }
 
-class SearchViewHolder(val binding: SearchListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-    val hotelName: TextView = itemView.findViewById(R.id.search_hotel_name)
-    val price: TextView = itemView.findViewById(R.id.search_price)
-    val address: TextView = itemView.findViewById(R.id.search_address)
-    val ratingBar: RatingBar = itemView.findViewById(R.id.search_ratingbar)
-    val favoriteButton: ImageView = itemView.findViewById(R.id.favorite_button)
+class SearchViewHolder(val binding: SearchListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
-    var image: ImageView = itemView.findViewById(R.id.search_image)
+class SearchResultDiffItemCallback : DiffUtil.ItemCallback<SearchResultViewModel.RenderListItem>() {
+    override fun areItemsTheSame(
+        oldItem: SearchResultViewModel.RenderListItem,
+        newItem: SearchResultViewModel.RenderListItem
+    ): Boolean = oldItem == newItem
+
+    override fun areContentsTheSame(
+        oldItem: SearchResultViewModel.RenderListItem,
+        newItem: SearchResultViewModel.RenderListItem
+    ): Boolean = oldItem.hotelBasicInfo.hotelNo == newItem.hotelBasicInfo.hotelNo
+            && oldItem.isRegistered == newItem.isRegistered
 
 }
-
 
 

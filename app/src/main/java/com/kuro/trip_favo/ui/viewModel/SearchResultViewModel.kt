@@ -1,10 +1,8 @@
 package com.kuro.trip_favo.ui.viewModel
 
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.kuro.trip_favo.data.api.HotelBasicInfo
-import com.kuro.trip_favo.data.database.FavoriteHotel
 import com.kuro.trip_favo.data.repositry.FavoriteHotelRepository
 import com.kuro.trip_favo.data.repositry.HotelRepository
 import kotlinx.coroutines.launch
@@ -48,6 +46,7 @@ class SearchResultViewModel(
                     RenderListItem(
                         hotelBasicInfo = hotelBasicInfo,
                         isRegistered = registeredResult.any { hotelBasicInfo.hotelNo == it.hotelNumber }
+                            .takeIf { it }
                     )
                 }
             }.onSuccess {
@@ -63,27 +62,28 @@ class SearchResultViewModel(
         }
     }
 
-    fun insert(data: HotelBasicInfo) {
+    fun onFavoriteButtonClick(renderListItem: RenderListItem) {
         viewModelScope.launch {
-
             val date = System.currentTimeMillis()
-            val favoriteHotel = data.toFavoriteHotel(date, onsen)
-            Log.d("favoriteHotel", favoriteHotel.toString())
-
-            favoriteHotelRepository.insert(favoriteHotel)
-        }
-    }
-
-    //    追記
-    fun delete(data: FavoriteHotel) {
-        viewModelScope.launch {
-            favoriteHotelRepository.delete(data)
+            val favoriteHotel = renderListItem.hotelBasicInfo.toFavoriteHotel(date, onsen)
+            if (renderListItem.isRegistered == true) {
+                favoriteHotelRepository.delete(favoriteHotel)
+            } else {
+                favoriteHotelRepository.insert(favoriteHotel)
+            }
+            _hotelResult.value = _hotelResult.value?.map {
+                if (it.hotelBasicInfo.hotelNo == renderListItem.hotelBasicInfo.hotelNo) {
+                    it.copy(isRegistered = !(it.isRegistered ?: false))
+                } else {
+                    it
+                }
+            }
         }
     }
 
     data class RenderListItem(
         val hotelBasicInfo: HotelBasicInfo,
-        val isRegistered: Boolean
+        val isRegistered: Boolean?
     ) {
         val price: String
             get() = "${hotelBasicInfo.hotelMinCharge}円"

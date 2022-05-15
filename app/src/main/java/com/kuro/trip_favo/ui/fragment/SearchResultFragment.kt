@@ -5,8 +5,11 @@ import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -32,10 +35,20 @@ class SearchResultFragment : Fragment(R.layout.fragment_search_result) {
         )
     }
     private val args: SearchResultFragmentArgs by navArgs()
-    private val searchAdapter = SearchAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.init(
+            args.middleClassCode,
+            args.smallClassCode,
+            args.detailClassCode,
+            args.squeezeCondition
+        )
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val searchAdapter = SearchAdapter(viewLifecycleOwner)
 
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentSearchResultBinding.bind(view)
@@ -50,6 +63,7 @@ class SearchResultFragment : Fragment(R.layout.fragment_search_result) {
                 LinearLayoutManager.VERTICAL
             )
         )
+        binding.searchRecyclerview.itemAnimator = null
 
 
 
@@ -63,90 +77,38 @@ class SearchResultFragment : Fragment(R.layout.fragment_search_result) {
                 startActivity(hotelIntent)
             }
 
-
-            override fun onFavoriteButtonClick(favoriteButton: View, data: HotelBasicInfo) {
-                val animation =
-                    AnimationUtils.loadAnimation(requireContext(), R.anim.favorite_button_animation)
-                favoriteButton.startAnimation(animation)
-                if (!favoriteButton.isSelected) {
-                    favoriteButton.isSelected = true
-                    favoriteButton.apply {
-                        setBackgroundResource(R.drawable.change_active_favorite_button)
-                        (background as AnimationDrawable).start()
-                    }
-//                    viewModel.insert(data)
-
-                } else if (favoriteButton.isSelected) {
-                    favoriteButton.isSelected = false
-                    favoriteButton.apply {
-                        setBackgroundResource(R.drawable.change_nomal_favorite_button)
-                        (background as AnimationDrawable).start()
-                    }
-                }
+            override fun onFavoriteButtonClick(
+                favoriteButton: View,
+                renderListItem: SearchResultViewModel.RenderListItem
+            ) {
+                viewModel.onFavoriteButtonClick(renderListItem)
             }
         })
 
-
-//                when (view) {
-//                    favoriteButton -> {
-//                        favoriteButton.startAnimation(animation)
-//                        if (favoriteButton.isSelected || viewModel.hotelList.value?.get(1)?.isRegistered == true) {
-//                            favoriteButton.isSelected = false
-//                            favoriteButton.apply {
-//                                setBackgroundResource(R.drawable.change_active_favorite_button)
-//                                (background as AnimationDrawable).start()
-//                            }
-//                            Log.d("insert", data.toString())
-//                        } else if (!favoriteButton.isSelected || viewModel.hotelList.value?.get(1)?.isRegistered == false) {
-//                            favoriteButton.isSelected = true
-//                            favoriteButton.apply {
-//                                setBackgroundResource(R.drawable.change_nomal_favorite_button)
-//                                (background as AnimationDrawable).start()
-//                            }
-//                            Log.d("delete", data.toString())
-//                        }
-//                    }
-//                    else -> startActivity(hotelIntent)
-//                }
-
-
-//            override fun onItemInsertClick(data: HotelBasicInfo) {
-//                viewModel.insert(data)
-//                favoriteButton.startAnimation(animation)
-//                favoriteButton.apply {
-//                    setBackgroundResource(R.drawable.change_active_favorite_button)
-//                    (background as AnimationDrawable).start()
-//                }
-//                Log.d("onItemInsertClick", data.toString())
-//            }
-
-//            override fun onItemDeleteClick(data: HotelBasicInfo) {
-        //LiveDataじゃないとだめかも
-//                val favoriteHotelData = viewModel.allHotelData
-//                Log.d("onItemDeleteClick", "onItemDeleteClick")
-//            }
-//})
-
-
-        viewModel.init(
-            args.middleClassCode,
-            args.smallClassCode,
-            args.detailClassCode,
-            args.squeezeCondition
-        )
-
         viewModel.hotelList.observe(viewLifecycleOwner) {
-
+            Log.d("hotelList", it.toString())
             val ratingSearchHotelInfo =
                 it.filter { it.hotelBasicInfo.reviewAverage >= args.selectedRating.toDouble() }
-            searchAdapter.setHotelInfo(ratingSearchHotelInfo)
-            searchAdapter.notifyDataSetChanged()
+            searchAdapter.submitList(ratingSearchHotelInfo)
         }
     }
-
-
 }
 
+
+@BindingAdapter("isRegistered")
+fun ImageView.setRegistered(isRegistered: Boolean?) {
+    isRegistered ?: setImageResource(R.drawable.ic_baseline_favorite_border_24)
+    val animation =
+        AnimationUtils.loadAnimation(context, R.anim.favorite_button_animation)
+    startAnimation(animation)
+    if (isRegistered == true) {
+        setBackgroundResource(R.drawable.change_active_favorite_button)
+        (background as AnimationDrawable).start()
+    } else {
+        setBackgroundResource(R.drawable.change_nomal_favorite_button)
+        (background as AnimationDrawable).start()
+    }
+}
 
 
 
